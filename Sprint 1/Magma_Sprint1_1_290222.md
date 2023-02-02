@@ -2,8 +2,8 @@
 <h2>In this meeting, all 4 members were present. It was done in order to plan out the beginning of the project: </h2>
 <h3>Date: 29th of January, 2023</h3>
 <h3>Start Time: 6:30 PM</h3>
-<h3>End Time: 7:23 PM</h3>
-<h3>Duration: 00:53</h3>
+<h3>End Time: 8:23 PM</h3>
+<h3>Duration: 01:53</h3>
   
 <h3>Topics Discussed :</h3>
   <uo> 
