@@ -1,6 +1,8 @@
-<h1>Project Description</h1>
+<h1>Task Breakdown</h1>
 
-<p> The project that we will develop in the following weeks consists of a website/application that connects job seekers and employers.
-This career services platform enables employers to advertise job openings and job seekers to maintain an online portfolio. 
-Both parties can create accounts, log in, view and apply for jobs, manage job postings, and receive notifications.
-The platform provides a secure and efficient solution for job recruitment and job searching.  </p>
+<h2>Team Member: Sathurthikan Saththyvel (40213455) & Oussama Cherifi (40212275) </h2>
+
+<p> <h3> Will mostly be involved in the back-end of the application. Both members will be in charge of handling the backend with Node.js. This will mostly involve connections with the interactive elements of the page. It also involves making the database for the users of the website. (Employers and Job Seekers)  </h3> </p>
+
+<h2>Team Member: Abdelmalek Anes (40229242) & Oussama Cherifi (40222514) </h2>
+<p><h3>In charge of the front-end, both members will use React to build the structure of the website. The structure of the website has not been fully decided yet. As such, for the first section, both members will be in charge of building a prototype. </h3> </p>
