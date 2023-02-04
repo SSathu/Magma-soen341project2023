@@ -26,3 +26,7 @@ The platform provides a secure and efficient solution for job recruitment and jo
 ### • Back-end Technology
 
 • NodeJS
+
+
+## Goals
+Provide a career service platform for students looking for jobs. 
