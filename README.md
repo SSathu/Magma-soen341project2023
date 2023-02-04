@@ -7,13 +7,12 @@ The platform provides a secure and efficient solution for job recruitment and jo
 
 
 ## Team Members
-
-| #   | Name                       | ID       | Role      |
-| --- | :------------------------- | :------- | :-------- |
-| 1   | Abdelmalek Anes            | 40229242 | Front-End |
-| 2   | Radeef Chowdhury           | 40222514 | Front-End |
-| 3   | Oussama Cherifi            | 40212275 | Back-End  |
-| 4   | Sathurtikan Saththyvel     | 40213455 | Back-End  |
+| #   | Name                       | ID       | Role      | Username                                                                      |
+| --- | :------------------------- | :------- | :-------- | :--------------------------------------------------------------------------   |
+| 1   | Abdelmalek Anes            | 40229242  | Front-End |[NotMalek](https://github.com/NotMalek )                                      |
+| 2   | Radeef Chowdhury           | 40222514 | Front-End |[radeefchowdhury](https://github.com/radeefchowdhury )                         |
+| 3   | Oussama Cherifi            | 40212275 | Back-End  |[OussamaCherifi](https://github.com/OussamaCherifi )                           |
+| 4   | Sathurtikan Saththyvel     | 40213455 | Back-End  |[SSathu](https://github.com/SSathu )                                           |
 
 
 ## Technologies
@@ -26,3 +25,7 @@ The platform provides a secure and efficient solution for job recruitment and jo
 ### • Back-end Technology
 
 • NodeJS
+
+
+## Goals
+Provide a career service platform for students looking for jobs. 
