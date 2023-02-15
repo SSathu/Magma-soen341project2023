@@ -20,6 +20,7 @@ The platform provides a secure and efficient solution for job recruitment and jo
 ### • Front-end Technology
 
 • ReactJS
+• NextJS
 
 
 ### • Back-end Technology
