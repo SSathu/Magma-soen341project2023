@@ -14,14 +14,13 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import logo from './careerhub_logo.png';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://google.com">
-        Your Website
+      <Link color="inherit" href="https://github.com/SSathu/Magma-soen341project2023">
+        CareerHub
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -29,7 +28,21 @@ function Copyright(props) {
   );
 }
 
-const theme = createTheme();
+const theme = createTheme({
+
+  palette: {
+    primary:{
+      main: '#2bbcc2',
+    },
+    custom: {
+      light: '#FFFFFF',
+      main: '#2bbcc2',
+      dark: '#FFFFFF',
+      contrastText: '#FFFFFF',
+    }
+  },
+  
+});
 
 export default function SignInSide() {
   const handleSubmit = (event) => {
@@ -99,7 +112,9 @@ export default function SignInSide() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+           
               <Button
+                color = "custom"
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -107,6 +122,7 @@ export default function SignInSide() {
               >
                 Sign In
               </Button>
+          
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
