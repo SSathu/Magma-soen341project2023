@@ -19,10 +19,13 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from './list';
 import { Button } from '@mui/material';
-import Card from '@mui/material/Card';
+import JobCard from '../Components/JobCard';
+import Grid from '@mui/material/Grid';
 import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+
+
 
 
 
@@ -202,36 +205,66 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 
-            <table  style={{color: "black"}}>
+            {/* <table style={{ color: "black" }}>
               <thead style={{ border: "black" }}>
-                <tr  style={{border: "3px solid rgb(0, 0, 0)"}}>
+                <tr style={{ border: "3px solid rgb(0, 0, 0)" }}>
 
                   <th style={{ outline: "black" }}>Job Title</th>
                   <th>Job Description</th>
 
                 </tr>
               </thead>
-              <tbody  style={{border: "3px solid rgb(0, 0, 0)"}}>
+              <tbody style={{ border: "3px solid rgb(0, 0, 0)" }}>
 
-                {postings && postings.map((jobPosting) => (
+                <div>
 
-                  <tr key={jobPosting.id}  style={{border: "3px solid rgb(0, 0, 0)"}}>
-                    <td>{jobPosting.jobTitle}</td>
-                    <td>{jobPosting.jobDescription}</td>
-                    {/* <td>jobPosting.dasd</td> */}
-                  </tr>
 
-                ))}
+                  {postings && postings.map((jobPosting) => (
+                    <JobCard posting={jobPosting} key={jobPosting.id} />
+                    // <tr key={jobPosting.id} style={{ border: "3px solid rgb(0, 0, 0)" }}>
+                    //   <td>{jobPosting.jobTitle}</td>
+                    //   <td>{jobPosting.jobDescription}</td>
 
+                    // </tr>
+
+                  ))}
+                </div>
 
 
               </tbody>
-            </table>
-          </Container>
+            </table> */}
 
-        </Box>
+
+            {/* <div className='JobContainer'> */}
+            <Container sx={{ py: 5 }} maxWidth="md">
+            <Grid container spacing={4}>
+              {postings && postings.map((jobPosting) => (
+                 <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
+                
+                   <CardContent sx={{ flexGrow: 4}}>
+                   <JobCard  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                 posting={jobPosting} key={jobPosting.id} />
+                    <Typography gutterBottom variant="h5" component="h2" style={{ color: "black" }}>
+                      {jobPosting.jobTitle}
+                    </Typography>
+                    <Typography style={{ color: "black" }}>
+                      {jobPosting.jobDescription}
+                    </Typography>
+                  </CardContent>
+                <CardActions>
+                    <Button size="small">View</Button>
+                    <Button size="small">Apply</Button>
+                  </CardActions>
+                </Grid>
+              ))}
+            </Grid>
+            </Container>
+          {/* </div> */}
+        </Container>
+
       </Box>
-    </ThemeProvider>
+    </Box>
+    </ThemeProvider >
   );
 }
 
