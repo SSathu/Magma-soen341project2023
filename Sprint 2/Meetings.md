@@ -42,5 +42,6 @@
 <li>Better Understanding of DataBase Connections with Prisma</li>
 <li>Linking with Front End Code </li>
 <li>Creation of the Job Postings Table and Linking</li>
-<li>Disscussing Design Aspects</li>  
+<li>Disscussing Design Aspects</li>
+<li>Planning other functionalities</li>
   
