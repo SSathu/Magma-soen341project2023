@@ -13,18 +13,26 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from './list';
+import { Button } from '@mui/material';
+import JobCard from '../Components/JobCard';
+import Grid from '@mui/material/Grid';
+import CardActions from '@mui/material/CardActions';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+
+
+
+
 
 const theme = createTheme({
 
   palette: {
-    primary:{
+    primary: {
       light: '#FFFFFF',
       main: '#2bbcc2',
       dark: '#FFFFFF',
@@ -37,7 +45,7 @@ const theme = createTheme({
       contrastText: '#FFFFFF',
     }
   },
-  
+
 });
 
 function Copyright(props) {
@@ -52,7 +60,7 @@ function Copyright(props) {
     </Typography>
   );
 }
-
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -103,9 +111,25 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
+  const [postings, setPostings] = React.useState(null);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  async function getPostings() {
+    let result = await fetch("/api/Postings");
+    let body = await result.json();
+    console.log(body);
+    setPostings(body)
+    console.log(postings);
+  }
+
+  React.useEffect(() => {
+    getPostings();
+
+
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
@@ -138,6 +162,7 @@ function DashboardContent() {
             >
               Dashboard
             </Typography>
+
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -179,12 +204,67 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
-        </Box>
+
+            {/* <table style={{ color: "black" }}>
+              <thead style={{ border: "black" }}>
+                <tr style={{ border: "3px solid rgb(0, 0, 0)" }}>
+
+                  <th style={{ outline: "black" }}>Job Title</th>
+                  <th>Job Description</th>
+
+                </tr>
+              </thead>
+              <tbody style={{ border: "3px solid rgb(0, 0, 0)" }}>
+
+                <div>
+
+
+                  {postings && postings.map((jobPosting) => (
+                    <JobCard posting={jobPosting} key={jobPosting.id} />
+                    // <tr key={jobPosting.id} style={{ border: "3px solid rgb(0, 0, 0)" }}>
+                    //   <td>{jobPosting.jobTitle}</td>
+                    //   <td>{jobPosting.jobDescription}</td>
+
+                    // </tr>
+
+                  ))}
+                </div>
+
+
+              </tbody>
+            </table> */}
+
+
+            {/* <div className='JobContainer'> */}
+            <Container sx={{ py: 5 }} maxWidth="md">
+            <Grid container spacing={4}>
+              {postings && postings.map((jobPosting) => (
+                 <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
+                
+                   <CardContent sx={{ flexGrow: 4}}>
+                   <JobCard  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                 posting={jobPosting} key={jobPosting.id} />
+                    <Typography gutterBottom variant="h5" component="h2" style={{ color: "black" }}>
+                      {jobPosting.jobTitle}
+                    </Typography>
+                    <Typography style={{ color: "black" }}>
+                      {jobPosting.jobDescription}
+                    </Typography>
+                  </CardContent>
+                <CardActions>
+                    <Button size="small">View</Button>
+                    <Button size="small">Apply</Button>
+                  </CardActions>
+                </Grid>
+              ))}
+            </Grid>
+            </Container>
+          {/* </div> */}
+        </Container>
+
       </Box>
-    </ThemeProvider>
+    </Box>
+    </ThemeProvider >
   );
 }
 
