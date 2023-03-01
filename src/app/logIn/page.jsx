@@ -113,7 +113,7 @@ export default function SignInSide() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-           
+              
               <Button
                 color = "custom"
                 type="submit"
@@ -121,10 +121,10 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign in
-               <Link href="/main">Sign In</Link> 
+                <Link href="/main">Sign in</Link>
+                <p>Sign in</p>
               </Button>
-          
+              
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
