@@ -1,44 +1,44 @@
-import * as React from 'react';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import CloudIcon from '@mui/icons-material/Cloud';
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import FemaleIcon from '@mui/icons-material/Female';
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
-import IcecreamIcon from '@mui/icons-material/Icecream';
+import * as React from "react";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { AiFillFolderOpen } from "react-icons/ai";
+import { CgProfile } from "react-icons/cg";
+import { HiOutlineLogout } from "react-icons/hi";
+import { FiHelpCircle } from "react-icons/fi";
+import { FiSettings } from "react-icons/fi";
 
 export const mainListItems = (
   <React.Fragment>
     <ListItemButton>
       <ListItemIcon>
-        <ElectricBoltIcon />
+        <AiFillFolderOpen size={25} />
       </ListItemIcon>
-      <ListItemText primary="Link 1" />
+      <ListItemText primary="Applications" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <CloudIcon />
+        <CgProfile size={25} />
       </ListItemIcon>
-      <ListItemText primary="Link 2" />
+      <ListItemText primary="Profil" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <FemaleIcon />
+        <FiHelpCircle size={25} />
       </ListItemIcon>
-      <ListItemText primary="Link 3" />
+      <ListItemText primary="Help" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <IcecreamIcon />
+        <FiSettings size={25} />
       </ListItemIcon>
-      <ListItemText primary="Link 4" />
+      <ListItemText primary="Settings" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <FingerprintIcon />
+        <HiOutlineLogout size={25} />
       </ListItemIcon>
-      <ListItemText primary="Link 5" />
+      <ListItemText primary="Log out" />
     </ListItemButton>
   </React.Fragment>
 );
