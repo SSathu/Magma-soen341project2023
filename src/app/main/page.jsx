@@ -158,7 +158,7 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              CareerHub 
             </Typography>
             <div className="main">
               <div className="search">
