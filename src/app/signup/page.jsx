@@ -207,77 +207,66 @@ function DashboardContent() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Post Job
+            Sign Up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                  required
-                  id="companyName"
-                  name="companyName"
-                  label="Company Name"
+                  id="firstname"
+                  name="firstname"
+                  label="First Name"
                   fullWidth
-                  autoComplete="company-name"
+                  autoComplete="first-name"
                   variant="standard"
+                  autoFocus
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                   required
-                  id="jobTitle"
-                  name="jobTitle"
-                  label="Job Title"
+                  required
+                  id="lastname"
+                  name="lastname"
+                  label="Last Name"
                   fullWidth
-                  autoComplete="job-title"
+                  autoComplete="last-name"
                   variant="standard"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
-                  id="salary"
-                  name="salary"
-                  label="Salary"
+                  id="email"
+                  name="email"
+                  label="Email"
                   fullWidth
-                  autoComplete="salary"
+                  autoComplete="email"
                   variant="standard"
-                  value={salary}
-                  onChange={handleSalaryChange}
-                  inputProps={{
-                    inputMode: 'numeric',
-                    pattern: '[0-9]*'
-                  }}
+                
+                
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                 id="jobDescription"
-                  name="jobDescription"
-                  label="Job Description"
+                required
+                 id="password"
+                 type = "password"
+                  name="password"
+                  label="Password"
                   fullWidth
-                  autoComplete="job-description"
+                  autoComplete="password"
                   variant="standard"
-                  multiline
-                  minRows={1}
-                  maxRows={10}
-                  inputProps={{
-                    style: {
-                      minHeight: '120px',
-                    },
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                  
+                 
                 />
               </Grid>
               <Grid item xs={12}>
               <div>
                   <label htmlFor="location"><b>Location:</b></label>
                  <select name="location" id="location" required>
-                  <option value="inperson">In Person</option>
-                     <option value="remote">Remote</option>
-                     <option value="hybrid">Hybrid</option>
+                  <option value="inperson">Student</option>
+                     <option value="remote">Employer</option>
                </select>
               </div>
               </Grid>
@@ -288,7 +277,7 @@ function DashboardContent() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Post Job
+              Sign up
             </Button>
             <Grid container justifyContent="flex-end">
              
