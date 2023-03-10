@@ -5,12 +5,15 @@
     align-items: center;
     flex-direction: column;
     row-gap: 20px;
+    background-color: azure;
+    color: black;
+
 }
 
 h1 {
     margin: 20%;
     font-size: 40px;
-    color: rgb(1, 1, 59);
+    color: rgb(0, 0, 10);
 }
 
 .search {
@@ -20,4 +23,5 @@ h1 {
 
 ul li {
     font-size: 30px;
+    
 } 
