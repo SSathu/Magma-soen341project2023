@@ -1,6 +1,5 @@
 "use client";
-
-import * as React from "react";
+// import { React, useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -20,11 +19,18 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./list";
 import { Button } from "@mui/material";
 import JobCard from "../Components/JobCard";
-import searchBar from "../Components/searchBar.css";
+// import SearchBar from "../Components/SearchBar";
 import Grid from "@mui/material/Grid";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+// import filteredItems from "../Components/filteredItems";
+// import TextField from "@mui/material/TextField";
+// import searchbar from "../components/searchbar.css"
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
+// import filteredItems from "./filteredItems";
+
+
 
 const theme = createTheme({
   palette: {
@@ -62,6 +68,8 @@ function Copyright(props) {
 }
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const drawerWidth = 240;
+
+
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -113,6 +121,19 @@ function DashboardContent() {
   const [open, setOpen] = React.useState(true);
   const [postings, setPostings] = React.useState(null);
 
+  const [filteredData, setfilteredData] = useState([]);
+
+  const inputHandler = (event) => {
+
+    const searchedWord = event.target.value
+    const newFilter = postings.filter((value) => {
+      return value.jobTitle.toLowerCase().includes(searchedWord.toLowerCase());
+
+
+    });
+    setfilteredData(newFilter)
+  }
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -120,14 +141,22 @@ function DashboardContent() {
   async function getPostings() {
     let result = await fetch("/api/Postings");
     let body = await result.json();
-    console.log(body);
+    //console.log("INSIDE GET POSTINGS" + body);
     setPostings(body);
-    console.log(postings);
+    // console.log(postings);
   }
+
+  async function getFilteredJobs() {
+    Filter = <input type="text" />
+
+  }
+
 
   React.useEffect(() => {
     getPostings();
   }, []);
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -158,18 +187,20 @@ function DashboardContent() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              CareerHub 
+              CareerHub
             </Typography>
             <div className="main">
               <div className="search">
                 <TextField
                   id="outlined-basic"
+                  onChange={inputHandler}
                   variant="outlined"
                   fullWidth
                   label="Search"
                 />
               </div>
             </div>
+
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -210,48 +241,54 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
+
+          {
+            filteredData.length != 0 && (
+
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Container sx={{ py: 5 }} maxWidth="md">
+            < Container sx={{ py: 5 }} maxWidth="md">
               <Grid container spacing={4}>
-                {postings &&
-                  postings.map((jobPosting) => (
-                    <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-                      <CardContent sx={{ flexGrow: 4 }}>
-                        <JobCard
-                          sx={{
-                            height: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                          posting={jobPosting}
-                          key={jobPosting.id}
-                        />
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          component="h2"
-                          style={{ color: "black" }}
-                        >
-                          {jobPosting.jobTitle}
-                        </Typography>
-                        <Typography style={{ color: "black" }}>
-                          {jobPosting.jobDescription}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button size="small">View</Button>
-                        <Button size="small">Apply</Button>
-                      </CardActions>
-                    </Grid>
-                  ))}
+                {filteredData && filteredData.map((jobPosting) => (
+                  <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
+                    <CardContent sx={{ flexGrow: 4 }}>
+                      <JobCard
+                        sx={{
+                          height: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                        posting={jobPosting}
+                        key={jobPosting.id}
+                      />
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        component="h2"
+                        style={{ color: "black" }}
+                      >
+                        {jobPosting.jobTitle}
+                      </Typography>
+                      <Typography style={{ color: "black" }}>
+                        {jobPosting.jobDescription}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small">View</Button>
+                      <Button size="small">Apply</Button>
+                    </CardActions>
+                  </Grid>
+
+                ))}
               </Grid>
             </Container>
           </Container>
+                )}
         </Box>
       </Box>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
+
 
 export default function Dashboard() {
   return <DashboardContent />;

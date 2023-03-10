@@ -9,7 +9,7 @@ export default async function Handler(req, res){
     
   const postings = await prisma.postings.findMany()
 
-    console.log(postings);
+    // console.log(postings);
     res.status(200).json(postings)
 
 
