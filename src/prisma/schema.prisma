@@ -13,11 +13,11 @@ datasource db {
 
 model User {
   id       Int    @id @default(autoincrement())
-  Name     String
+  FirstName     String
+  LastName      String
   Email    String
   Password String
   LoggedIn Boolean @default(false)
-  // post Post[]
 }
 
 model Postings {

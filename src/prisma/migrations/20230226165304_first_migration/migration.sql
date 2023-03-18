@@ -13,3 +13,4 @@ CREATE TABLE "Postings" (
     "jobTitle" TEXT NOT NULL,
     "jobDescription" TEXT NOT NULL
 );
+
