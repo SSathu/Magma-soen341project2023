@@ -14,6 +14,10 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react';
+import { Prisma, PrismaClient } from '@prisma/client'
+import { Schema } from '@mui/icons-material';
+//import { createUser } from './users';
 
 
 function Copyright(props) {
@@ -45,19 +49,51 @@ const theme = createTheme({
   
 });
 
+
+
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+
+  const [formData, setFormData] = useState({
+    firstname:'', 
+    lastname:'',
+    email:'',
+    password:'',
+    occupation:''
+  });
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    const response = await fetch('/api/AppUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        firstname: formData.firstname, 
+        lastname: formData.lastname, 
+        email: formData.email, 
+        password: formData.password 
+      })
     });
-  };
+    console.log(response)
+    const json = await response.json();
+    console.log(json);
+  }
+
+  function handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const id = target.id;
+
+    setFormData({
+      ...formData,
+      [id]: value
+    });
+  }
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid container component="main" sx={{ height: '100vh' }} >
         <CssBaseline />
         <Grid
           item
@@ -99,6 +135,8 @@ export default function SignInSide() {
                 name="firstname"
                 autoComplete="firstname"
                 autoFocus
+                value={formData.firstname}
+                onChange={handleInputChange}
               />
                  <TextField
                 margin="normal"
@@ -109,7 +147,10 @@ export default function SignInSide() {
                 name="lastname"
                 autoComplete="lastname"
                 autoFocus
+                value={formData.lastname}
+                onChange={handleInputChange}
               />
+
               <TextField
                 margin="normal"
                 required
@@ -119,6 +160,8 @@ export default function SignInSide() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={formData.email}
+                onChange={handleInputChange}
               />
               <TextField
                 margin="normal"
@@ -129,11 +172,16 @@ export default function SignInSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formData.password}
+                onChange={handleInputChange}
               />
               <Grid item xs={12}>
               <div>
                   <label htmlFor="Occupation">Occupation:</label>
-                 <select name="Occupation" id="Occupation" required>
+                 <select name="Occupation" id="Occupation" 
+                   value={formData.occupation}
+                  onChange={handleInputChange}
+                 >
                   <option value="student">Student</option>
                      <option value="employer">Employer</option>
                </select>
@@ -148,7 +196,6 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                <Link href="/main">Sign up</Link>
                 <p>Sign up</p>
               </Button>
               
