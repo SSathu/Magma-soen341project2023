@@ -271,7 +271,7 @@ function DashboardContent() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} color= 'custom'>
               <div>
                   <label htmlFor="location"><b>Location:</b></label>
                  <select name="location" id="location" required>
@@ -298,14 +298,7 @@ function DashboardContent() {
             
             <Copyright sx={{ pt: 4 }} />
             </Container>
-          
-            
-
-
-
-
-
-
+                      
         
         </Box>
       </Box>
