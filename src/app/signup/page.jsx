@@ -60,9 +60,22 @@ export default function SignInSide() {
     password:'',
     occupation:''
   });
+  const [error, setError] = useState('');
+
+  
 
   async function handleSubmit(event) {
     event.preventDefault();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.email)) {
+  setError('Email is Not Valid');
+    return;
+}
+  if(formData.firstname == '' || formData.lastname == ''|| formdata.email == '' || formData.password =='' ){
+  setError('No Fields Can Be Empty');
+  return;
+  }
     const response = await fetch('/api/AppUser', {
       method: 'POST',
       headers: {
@@ -75,9 +88,13 @@ export default function SignInSide() {
         password: formData.password 
       })
     });
-    console.log(response)
     const json = await response.json();
-    console.log(json);
+    if (json.error) {
+      setError(json.error);
+    } else {
+      setError('');
+      console.log(json);
+    }
   }
 
   function handleInputChange(event) {
@@ -188,7 +205,10 @@ export default function SignInSide() {
               </div>
               </Grid>
              
-              
+              <Typography color='error' align='center'>
+              {error}
+            </Typography>
+
               <Button
                 color = "custom"
                 type="submit"
