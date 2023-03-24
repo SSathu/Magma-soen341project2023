@@ -5,28 +5,28 @@ import ListItemText from "@mui/material/ListItemText";
 import { AiFillFolderOpen } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { HiOutlineLogout } from "react-icons/hi";
-import { FiHelpCircle } from "react-icons/fi";
 import { FiSettings } from "react-icons/fi";
+import WorkIcon from '@mui/icons-material/Work';
 
 export const mainListItems = (
   <React.Fragment>
-    <ListItemButton>
+    <ListItemButton  href="/main">
       <ListItemIcon>
         <AiFillFolderOpen size={25} />
       </ListItemIcon>
-      <ListItemText primary="Applications" />
+      <ListItemText primary="Applications"/>
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton href="/profile">
       <ListItemIcon>
         <CgProfile size={25} />
       </ListItemIcon>
-      <ListItemText primary="Profil" />
+      <ListItemText primary="Profile" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton href="/jobposting">
       <ListItemIcon>
-        <FiHelpCircle size={25} />
+        <WorkIcon size={25} />
       </ListItemIcon>
-      <ListItemText primary="Help" />
+      <ListItemText primary="Post a Job" />
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
