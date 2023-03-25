@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from 'react';
+import { useState } from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -46,7 +47,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://github.com/SSathu/Magma-soen341project2023">
         CareerHub
       </Link>{' '}
       {new Date().getFullYear()}
@@ -207,63 +208,105 @@ function DashboardContent() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Post Job
+            Edit Profile
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+            <Grid item xs={6}>
+                <TextField
+                  required
+                  id="firstName"
+                  name="firstName"
+                  label="First Name"
+                  fullWidth
+                  autoComplete="first-Name"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  id="lastName"
+                  name="lastName"
+                  label="Last Name"
+                  fullWidth
+                  autoComplete="last-Name"
+                  variant="standard"
+                />
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                  required
-                  id="companyName"
-                  name="companyName"
-                  label="Company Name"
+                  id="emal"
+                  name="email"
+                  label="Email address"
                   fullWidth
-                  autoComplete="company-name"
+                  autoComplete="email"
                   variant="standard"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                   required
-                  id="jobTitle"
-                  name="jobTitle"
-                  label="Job Title"
-                  fullWidth
-                  autoComplete="job-title"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <TextField
                   required
-                  id="salary"
-                  name="salary"
-                  label="Salary"
+                  id="number"
+                  name="number"
+                  label="Phone number"
                   fullWidth
-                  autoComplete="salary"
+                  autoComplete="number"
                   variant="standard"
-                  value={salary}
-                  onChange={handleSalaryChange}
                   inputProps={{
                     inputMode: 'numeric',
                     pattern: '[0-9]*'
                   }}
                 />
               </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  required
+                  id="city"
+                  name="city"
+                  label="City"
+                  fullWidth
+                  autoComplete="city"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  required
+                  id="country"
+                  name="country"
+                  label="Country"
+                  fullWidth
+                  autoComplete="country"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  required
+                  id="postalCode"
+                  name="postalCode"
+                  label="Postal Code"
+                  fullWidth
+                  autoComplete="postalCode"
+                  variant="standard"
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
-                 id="jobDescription"
-                  name="jobDescription"
-                  label="Job Description"
+                 id="bio"
+                  name="bio"
+                  label="Biography"
                   fullWidth
-                  autoComplete="job-description"
+                  autoComplete="bio"
                   variant="standard"
                   multiline
                   minRows={1}
                   maxRows={10}
                   inputProps={{
                     style: {
-                      minHeight: '120px',
+                      minHeight: '60px',
                     },
                   }}
                   InputLabelProps={{
@@ -271,24 +314,21 @@ function DashboardContent() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} color= 'custom'>
-              <div>
-                  <label htmlFor="location"><b>Location:</b></label>
-                 <select name="location" id="location" required>
-                  <option value="inperson">In Person</option>
-                     <option value="remote">Remote</option>
-                     <option value="hybrid">Hybrid</option>
-               </select>
-              </div>
+              <Grid item xs={12}>
+                <Button>
+                      Upload a resume
+                </Button>
               </Grid>
+      
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
+              color = 'custom'
               sx={{ mt: 3, mb: 2 }}
             >
-              Post Job
+              Save Changes
             </Button>
             <Grid container justifyContent="flex-end">
              
