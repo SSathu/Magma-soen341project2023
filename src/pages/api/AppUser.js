@@ -12,6 +12,18 @@ export default async function Handler(req, res){
         const { firstname, lastname, email, password } = req.body;
    
         try {
+          
+          const existingUser = await prisma.user.findFirst({
+            where:{
+              Email:email
+            }
+          });
+
+          if (existingUser) {
+            // If the email already exists, return a 409 Conflict response
+            return res.status(409).json({ error: 'Email already exists' });
+          }
+
           const newUser = await prisma.user.create({
             data: {
               FirstName: firstname,
