@@ -21,7 +21,7 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from './list';
+import { mainListItems, secondaryListItems } from '../main/list';
 
 const theme = createTheme({
 
@@ -46,7 +46,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://github.com/SSathu/Magma-soen341project2023">
         CareerHub
       </Link>{' '}
       {new Date().getFullYear()}
