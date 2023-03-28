@@ -192,18 +192,7 @@ export default function SignInSide() {
                 value={formData.password}
                 onChange={handleInputChange}
               />
-              <Grid item xs={12}>
-              <div>
-                  <label htmlFor="Occupation">Occupation:</label>
-                 <select name="Occupation" id="Occupation" 
-                   value={formData.occupation}
-                  onChange={handleInputChange}
-                 >
-                  <option value="student">Student</option>
-                     <option value="employer">Employer</option>
-               </select>
-              </div>
-              </Grid>
+            
              
               <Typography color='error' align='center'>
               {error}
