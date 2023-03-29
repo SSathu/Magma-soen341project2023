@@ -23,7 +23,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../main/list';
-import Avatar from '@mui/material/Avatar';
 
 const theme = createTheme({
 
@@ -208,29 +207,120 @@ function DashboardContent() {
             alignItems: 'center',
           }}
         >
-           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          </Avatar>
           <Typography component="h1" variant="h5">
-            My Profile
+            Edit Profile
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <p> Name : First and Last</p>
-              <p>Email : firstlast@gmail.com</p>
-              <p>Phone Number:  543-453-5345</p>
-              <p>Location : Montreal Quebec</p>
-              <p>Bio: RACONTE PAS TA VIE FDP</p>
-              
-             
-            
-              
-              
-             
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+            <Grid item xs={6}>
+                <TextField
+                  required
+                  id="firstName"
+                  name="firstName"
+                  label="First Name"
+                  fullWidth
+                  autoComplete="first-Name"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  id="lastName"
+                  name="lastName"
+                  label="Last Name"
+                  fullWidth
+                  autoComplete="last-Name"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                 required
+                  id="emal"
+                  name="email"
+                  label="Email address"
+                  fullWidth
+                  autoComplete="email"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  required
+                  id="number"
+                  name="number"
+                  label="Phone number"
+                  fullWidth
+                  autoComplete="number"
+                  variant="standard"
+                  inputProps={{
+                    inputMode: 'numeric',
+                    pattern: '[0-9]*'
+                  }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  required
+                  id="city"
+                  name="city"
+                  label="City"
+                  fullWidth
+                  autoComplete="city"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  required
+                  id="country"
+                  name="country"
+                  label="Country"
+                  fullWidth
+                  autoComplete="country"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  required
+                  id="postalCode"
+                  name="postalCode"
+                  label="Postal Code"
+                  fullWidth
+                  autoComplete="postalCode"
+                  variant="standard"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                 id="bio"
+                  name="bio"
+                  label="Biography"
+                  fullWidth
+                  autoComplete="bio"
+                  variant="standard"
+                  multiline
+                  minRows={1}
+                  maxRows={10}
+                  inputProps={{
+                    style: {
+                      minHeight: '60px',
+                    },
+                  }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <Button>
-                      Edit Profile
+                      Upload a resume
                 </Button>
               </Grid>
       
+            </Grid>
             <Button
               type="submit"
               fullWidth
@@ -238,7 +328,7 @@ function DashboardContent() {
               color = 'custom'
               sx={{ mt: 3, mb: 2 }}
             >
-              View Application
+              Save Changes
             </Button>
             <Grid container justifyContent="flex-end">
              
