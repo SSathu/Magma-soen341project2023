@@ -33,6 +33,7 @@ export default async function Handler(req, res){
               LoggedIn: false
             }
           });
+          return res.status(200).json({ message: 'Login successful' }); 
           console.log(newUser); // Add this line to log the newUser object
         } catch (error) {
           console.error(error);
