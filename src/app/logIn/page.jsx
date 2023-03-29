@@ -14,6 +14,8 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react';
+
 
 
 function Copyright(props) {
@@ -46,15 +48,59 @@ const theme = createTheme({
 });
 
 export default function SignInSide() {
-  const handleSubmit = (event) => {
+
+  const [formData, setFormData] = useState({
+    email:'', 
+    password:'',
+  });
+
+  const [error, setError] = useState('');
+
+  async function handleSubmit(event){
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+    setError('Email is Not Valid');
+      return;
+    }
+    if(formData.email == '' || formData.password == ''){
+      setError('No Fields Can Be Empty');
+      return;
+    }
+    const response = await fetch('/api/AppLogin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        email: formData.email, 
+        password: formData.password
+      })
     });
+
+    const json = await response.json();
+    if (json.error) {
+      console.log(json.error);
+      setError(json.error);
+    } else {
+      window.location.href = '/main'
+    }
+
+
   };
 
+
+  function handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const id = target.id;
+
+    setFormData({
+      ...formData,
+      [id]: value
+    });
+  }
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -97,6 +143,7 @@ export default function SignInSide() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleInputChange}
                 autoFocus
               />
               <TextField
@@ -107,13 +154,16 @@ export default function SignInSide() {
                 label="Password"
                 type="password"
                 id="password"
+                onChange={handleInputChange}
                 autoComplete="current-password"
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              
+               <Typography color='error' align='center'>
+              {error}
+            </Typography>
               <Button
                 color = "custom"
                 type="submit"
@@ -121,7 +171,7 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                <Link href="/main">Sign in</Link>
+                {/* <Link href="/main">Sign in</Link> */}
                 <p>Sign in</p>
               </Button>
               

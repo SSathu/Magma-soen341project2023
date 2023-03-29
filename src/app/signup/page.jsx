@@ -68,14 +68,14 @@ export default function SignInSide() {
     event.preventDefault();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formData.email)) {
-  setError('Email is Not Valid');
-    return;
-}
-  if(formData.firstname == '' || formData.lastname == ''|| formdata.email == '' || formData.password =='' ){
-  setError('No Fields Can Be Empty');
-  return;
-  }
+    if (!emailRegex.test(formData.email)) {
+      setError('Email is Not Valid');
+      return;
+    }
+    // if(formData.firstname == '' || formData.lastname == ''|| formdata.email == '' || formData.password =='' ){
+    //   setError('No Fields Can Be Empty');
+    //   return;
+    // }
     const response = await fetch('/api/AppUser', {
       method: 'POST',
       headers: {
@@ -90,10 +90,10 @@ export default function SignInSide() {
     });
     const json = await response.json();
     if (json.error) {
+      console.log(json.error);
       setError(json.error);
     } else {
-      setError('');
-      console.log(json);
+      window.location.href = '/logIn'
     }
   }
 
