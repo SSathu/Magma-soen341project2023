@@ -27,7 +27,7 @@ import { mainListItems, secondaryListItems } from '../main/list';
 const theme = createTheme({
 
   palette: {
-    primary:{
+    primary: {
       light: '#FFFFFF',
       main: '#2bbcc2',
       dark: '#FFFFFF',
@@ -40,7 +40,7 @@ const theme = createTheme({
       contrastText: '#FFFFFF',
     }
   },
-  
+
 });
 
 function Copyright(props) {
@@ -105,6 +105,33 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
+
+  const [users, setUsers] = React.useState(null);
+
+  async function getUsers() {
+    let result = await fetch("/api/readUsers");
+    let body = await result.json();
+
+    setUsers(body);
+
+  }
+
+
+  React.useEffect(() => {
+    getUsers();
+  }, []);
+
+
+  const [firstname, setFirstName] = useState('')
+  const [lastname, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [country, setCountry] = useState('')
+  const [postalCode, setPostalCode] = useState('')
+  const [bio, setBio] = useState('')
+  const [city, setCity] = useState('')
+  const [phone, setPhone] = useState('')
+
+
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -117,13 +144,34 @@ function DashboardContent() {
       setSalary(value);
     }
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const handleSubmit = async () => {
+
+    const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
+
+    const loggedInJobPostingId = loggedInJobPosting.id;
+
+    if (loggedInJobPosting) {
+      console.log(`The ID of the logged in job posting is: ${loggedInJobPostingId}`);
+    } else {
+      console.log('No job posting found where loggedIn is true.');
+    }
+
+    try {
+      const response = await fetch('/api/editProfil', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({  loggedInJobPostingId, firstname, lastname, email, country, postalCode, bio, city , phone}),
+      });
+
+      const data = await response.json();
+      console.log("this is the json");
+      console.log(data)
+    } catch (error) {
+      console.error(error);
+    }
+
   };
 
   return (
@@ -199,154 +247,169 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 
-          <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Edit Profile
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-            <Grid item xs={6}>
-                <TextField
-                  required
-                  id="firstName"
-                  name="firstName"
-                  label="First Name"
-                  fullWidth
-                  autoComplete="first-Name"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  id="lastName"
-                  name="lastName"
-                  label="Last Name"
-                  fullWidth
-                  autoComplete="last-Name"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                 required
-                  id="emal"
-                  name="email"
-                  label="Email address"
-                  fullWidth
-                  autoComplete="email"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  required
-                  id="number"
-                  name="number"
-                  label="Phone number"
-                  fullWidth
-                  autoComplete="number"
-                  variant="standard"
-                  inputProps={{
-                    inputMode: 'numeric',
-                    pattern: '[0-9]*'
-                  }}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  required
-                  id="city"
-                  name="city"
-                  label="City"
-                  fullWidth
-                  autoComplete="city"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  required
-                  id="country"
-                  name="country"
-                  label="Country"
-                  fullWidth
-                  autoComplete="country"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  required
-                  id="postalCode"
-                  name="postalCode"
-                  label="Postal Code"
-                  fullWidth
-                  autoComplete="postalCode"
-                  variant="standard"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                 id="bio"
-                  name="bio"
-                  label="Biography"
-                  fullWidth
-                  autoComplete="bio"
-                  variant="standard"
-                  multiline
-                  minRows={1}
-                  maxRows={10}
-                  inputProps={{
-                    style: {
-                      minHeight: '60px',
-                    },
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button>
-                      Upload a resume
-                </Button>
-              </Grid>
-      
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color = 'custom'
-              sx={{ mt: 3, mb: 2 }}
+            <Box
+              sx={{
+                marginTop: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
             >
-              Save Changes
-            </Button>
-            <Grid container justifyContent="flex-end">
-             
-            </Grid>
-          </Box>
-        </Box>
-            
+              <Typography component="h1" variant="h5">
+                Edit Profile
+              </Typography>
+              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      id="firstName"
+                      name="firstName"
+                      label="First Name"
+                      fullWidth
+                      autoComplete="first-Name"
+                      variant="standard"
+                      onChange={(event) => setFirstName(event.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      id="lastName"
+                      name="lastName"
+                      label="Last Name"
+                      fullWidth
+                      autoComplete="last-Name"
+                      variant="standard"
+                      onChange={(event) => setLastName(event.target.value)}
+
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      id="emal"
+                      name="email"
+                      label="Email address"
+                      fullWidth
+                      autoComplete="email"
+                      variant="standard"
+                      onChange={(event) => setEmail(event.target.value)}
+
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      required
+                      id="number"
+                      name="number"
+                      label="Phone number"
+                      fullWidth
+                      autoComplete="number"
+                      variant="standard"
+                      inputProps={{
+                        inputMode: 'numeric',
+                        pattern: '[0-9]*'
+                      }}
+                      onChange={(event) => setPhone(event.target.value)}
+
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <TextField
+                      required
+                      id="city"
+                      name="city"
+                      label="City"
+                      fullWidth
+                      autoComplete="city"
+                      variant="standard"
+                      onChange={(event) => setCity(event.target.value)}
+
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <TextField
+                      required
+                      id="country"
+                      name="country"
+                      label="Country"
+                      fullWidth
+                      autoComplete="country"
+                      variant="standard"
+                      onChange={(event) => setCountry(event.target.value)}
+
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <TextField
+                      required
+                      id="postalCode"
+                      name="postalCode"
+                      label="Postal Code"
+                      fullWidth
+                      autoComplete="postalCode"
+                      variant="standard"
+                      onChange={(event) => setPostalCode(event.target.value)}
+
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      id="bio"
+                      name="bio"
+                      label="Biography"
+                      fullWidth
+                      autoComplete="bio"
+                      variant="standard"
+                      multiline
+                      minRows={1}
+                      maxRows={10}
+                      inputProps={{
+                        style: {
+                          minHeight: '60px',
+                        },
+                      }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      onChange={(event) => setBio(event.target.value)}
+
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button>
+                      Upload a resume
+                    </Button>
+                  </Grid>
+
+                </Grid>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color='custom'
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Save Changes
+                </Button>
+                <Grid container justifyContent="flex-end">
+
+                </Grid>
+              </Box>
+            </Box>
+
             <Copyright sx={{ pt: 4 }} />
-            </Container>
-                      
-        
+          </Container>
+
+
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
 
- 
+
 export default function Dashboard() {
   return <DashboardContent />;
 }
