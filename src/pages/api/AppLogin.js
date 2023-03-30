@@ -13,11 +13,20 @@ export default async function Handler(req, res){
         const{email, password } = req.body;
         try{
             
-            const existingAccount = await prisma.user.findFirst({
+            const loggedUser = await prisma.user.findFirst({
+              where:{
+                Email:email
+              }
+            });
+            const logId = loggedUser.id;
+
+            const existingAccount = await prisma.user.update({
                 where: {
-                  Email:email,
-                  Password:password,
+                  id:logId,
                 },
+                data:{
+                  LoggedIn:true},
+
               });
 
               if (!existingAccount) {

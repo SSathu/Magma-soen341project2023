@@ -29,8 +29,12 @@ model User {
 
 model Postings {
   id             Int    @id @default(autoincrement())
-  jobTitle       String
-  jobDescription String
+  Email          String
+  CompanyName    String
+  jobTitle       String?
+  jobDescription String?
+  Salary         String
+  Location       String
   Image String @default("")
   // user User @relation(fields: [userId], references: [id])
   // userId Int

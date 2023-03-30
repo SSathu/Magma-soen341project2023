@@ -22,6 +22,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../main/list';
+import { useState } from 'react';
+
 
 const theme = createTheme({
 
@@ -104,6 +106,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
+
+  const [formData, setFormData] = useState({
+    companyname:'', 
+    jobtitle:'',
+    jobdescription:'',
+    salary:'',
+    location:'',
+  });
+
+  const [error, setError] = useState('');
+
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -116,14 +129,41 @@ function DashboardContent() {
       setSalary(value);
     }
   };
-  const handleSubmit = (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+
+    const response = await fetch('/api/AppPostings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        companyname: formData.companyname, 
+        jobtitle: formData.jobtitle, 
+        jobdescription: formData.jobdescription, 
+        salary: salary,
+        location: formData.location 
+      })
     });
+    const json = await response.json();
+    if (json.error) {
+      console.log(json.error);
+      setError(json.error);
+    } else {
+setError("Worked")    }
   };
+
+  function handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const id = target.id;
+
+    setFormData({
+      ...formData,
+      [id]: value
+    });
+  }
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -214,23 +254,26 @@ function DashboardContent() {
               <Grid item xs={12} sm={6}>
                 <TextField
                  required
-                  id="companyName"
+                  id="companyname"
                   name="companyName"
                   label="Company Name"
                   fullWidth
                   autoComplete="company-name"
                   variant="standard"
+                  onChange={handleInputChange}
+
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                    required
-                  id="jobTitle"
+                  id="jobtitle"
                   name="jobTitle"
                   label="Job Title"
                   fullWidth
                   autoComplete="job-title"
                   variant="standard"
+                  onChange={handleInputChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -252,7 +295,7 @@ function DashboardContent() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                 id="jobDescription"
+                 id="jobdescription"
                   name="jobDescription"
                   label="Job Description"
                   fullWidth
@@ -261,6 +304,7 @@ function DashboardContent() {
                   multiline
                   minRows={1}
                   maxRows={10}
+                  onChange={handleInputChange}
                   inputProps={{
                     style: {
                       minHeight: '120px',
@@ -274,7 +318,7 @@ function DashboardContent() {
               <Grid item xs={12} color= 'custom'>
               <div>
                   <label htmlFor="location"><b>Location:</b></label>
-                 <select name="location" id="location" required>
+                 <select name="location" id="location" required onChange={handleInputChange}>
                   <option value="inperson">In Person</option>
                      <option value="remote">Remote</option>
                      <option value="hybrid">Hybrid</option>
@@ -282,6 +326,10 @@ function DashboardContent() {
               </div>
               </Grid>
             </Grid>
+            <Typography color='error' align='center'>
+              {error}
+            </Typography>
+           
             <Button
               type="submit"
               fullWidth
