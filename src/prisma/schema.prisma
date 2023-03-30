@@ -13,13 +13,19 @@ datasource db {
 
 
 model User {
-  id       Int    @id @default(autoincrement())
-  FirstName     String
-  LastName      String
-  Email    String
-  Password String
-  LoggedIn Boolean @default(false)
+  id           Int      @id @default(autoincrement())
+  FirstName    String
+  LastName     String
+  Email        String
+  Password     String
+  LoggedIn     Boolean  @default(false)
+  PhoneNumber String?     
+  City         String?
+  Country      String?
+  PostalCode   String?
+  Bio          String?
 }
+
 
 model Postings {
   id             Int    @id @default(autoincrement())
