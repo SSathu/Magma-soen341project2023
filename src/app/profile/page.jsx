@@ -28,7 +28,7 @@ import Avatar from '@mui/material/Avatar';
 const theme = createTheme({
 
   palette: {
-    primary:{
+    primary: {
       light: '#FFFFFF',
       main: '#2bbcc2',
       dark: '#FFFFFF',
@@ -41,7 +41,7 @@ const theme = createTheme({
       contrastText: '#FFFFFF',
     }
   },
-  
+
 });
 
 function Copyright(props) {
@@ -106,6 +106,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 function DashboardContent() {
+
+  const [users, setUsers] = React.useState(null);
+
+  async function getUsers() {
+    let result = await fetch("/api/readUsers");
+    let body = await result.json();
+
+    setUsers(body);
+
+  }
+
+
+  React.useEffect(() => {
+    getUsers();
+  }, []);
+
+
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -126,6 +143,8 @@ function DashboardContent() {
       password: data.get('password'),
     });
   };
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -198,65 +217,90 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 
-          <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            My Profile
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <p> Name : First and Last</p>
-              <p>Email : firstlast@gmail.com</p>
-              <p>Phone Number:  543-453-5345</p>
-              <p>Location : Montreal Quebec</p>
-              <p>Bio: RACONTE PAS TA VIE FDP</p>
-              
-             
-            
-              
-              
-             
-              <Grid item xs={12}>
-                <Button>
-                      Edit Profile
-                </Button>
-              </Grid>
-      
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color = 'custom'
-              sx={{ mt: 3, mb: 2 }}
-            >
-              View Application
-            </Button>
-            <Grid container justifyContent="flex-end">
-             
-            </Grid>
-          </Box>
-        </Box>
-            
-            <Copyright sx={{ pt: 4 }} />
-            </Container>
-                      
-        
+          {users && users
+            .filter((user) => user.LoggedIn === true)
+            // .map((user) => ({
+            //   ...user,
+            //   password: user.password.replace(/./g, '*'),
+            // }))
+            .map((user) => (
+
+              <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+
+                <Box
+                  sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                  </Avatar>
+                  <Typography component="h1" variant="h5">
+                    My Profile
+                  </Typography>
+
+
+                  <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                    <p>Name : {user.FirstName} , {user.LastName}</p>
+                    <p>Email : {user.Email}</p>
+                    <p>Password : {user.Password ? user.Password.replace(/./g, '*') : ''}</p>
+                    <p>Phone Number:  {user.PhoneNumber}</p>
+                    <p>City:  {user.City }</p>
+                    <p>Country:  {user.Country}</p>
+                    <p>Postal Code:  {user.PostalCode}</p>
+                    <p>Bio: {user.Bio}</p>
+
+
+
+
+
+
+                    <Grid item xs={12}>
+                      <Button>
+                        <Link href="/profileedit" passHref>
+                          
+                           Edit Profil
+                          
+                        </Link>
+                      </Button>
+                    </Grid>
+
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color='custom'
+                      sx={{ mt: 3, mb: 2 }}
+                    >
+                      View Application
+                    </Button>
+                    <Grid container justifyContent="flex-end">
+
+                    </Grid>
+                  </Box>
+                </Box>
+
+                <Copyright sx={{ pt: 4 }} />
+              </Container>
+
+            ))
+          }
+
+
+
+
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
 
- 
+
 export default function Dashboard() {
   return <DashboardContent />;
 }
+
+
