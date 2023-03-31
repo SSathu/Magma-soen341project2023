@@ -24,6 +24,7 @@ model User {
   Country      String?
   PostalCode   String?
   Bio          String?
+  Occupation   String?
 }
 
 
