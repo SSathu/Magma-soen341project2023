@@ -8,6 +8,8 @@ import { HiOutlineLogout } from "react-icons/hi";
 import { FiSettings } from "react-icons/fi";
 import WorkIcon from '@mui/icons-material/Work';
 
+
+
 export const mainListItems = (
   <React.Fragment>
     <ListItemButton  href="/main">
@@ -34,7 +36,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Settings" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton onClick={handleSubmit}>
       <ListItemIcon>
         <HiOutlineLogout size={25} />
       </ListItemIcon>
@@ -42,3 +44,23 @@ export const mainListItems = (
     </ListItemButton>
   </React.Fragment>
 );
+
+async function handleSubmit(){
+  const response = await fetch('/api/AppLogout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+    })
+  });
+
+  const json = await response.json();
+  if (json.error) {
+    console.log(json.error);
+    setError(json.error);
+  } else {
+    window.location.href = '/logIn'
+  }
+};
+

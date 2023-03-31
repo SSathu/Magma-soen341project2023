@@ -9,7 +9,7 @@ export default async function Handler(req, res){
     
     if(req.method == "POST"){
         console.log("Called")
-        const { firstname, lastname, email, password } = req.body;
+        const { firstname, lastname, email, password, occupation } = req.body;
    
         try {
           
@@ -30,7 +30,8 @@ export default async function Handler(req, res){
               LastName: lastname,
               Email: email,
               Password: password,
-              LoggedIn: false
+              LoggedIn: false,
+              Occupation: occupation
             }
           });
           return res.status(200).json({ message: 'Login successful' }); 
