@@ -1,57 +1,63 @@
-"use client"
+"use client";
 
-import * as React from 'react';
-import { useState } from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from '../main/list';
+import * as React from "react";
+import { useState } from "react";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import MuiDrawer from "@mui/material/Drawer";
+import Box from "@mui/material/Box";
+import MuiAppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import List from "@mui/material/List";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Badge from "@mui/material/Badge";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Link from "@mui/material/Link";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { mainListItems, secondaryListItems } from "../main/list";
 
 const theme = createTheme({
-
   palette: {
     primary: {
-      light: '#FFFFFF',
-      main: '#2bbcc2',
-      dark: '#FFFFFF',
-      contrastText: '#FFFFFF',
+      light: "#FFFFFF",
+      main: "#2bbcc2",
+      dark: "#FFFFFF",
+      contrastText: "#FFFFFF",
     },
     custom: {
-      light: '#FFFFFF',
-      main: '#2bbcc2',
-      dark: '#FFFFFF',
-      contrastText: '#FFFFFF',
-    }
+      light: "#FFFFFF",
+      main: "#2bbcc2",
+      dark: "#FFFFFF",
+      contrastText: "#FFFFFF",
+    },
   },
-
 });
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://github.com/SSathu/Magma-soen341project2023">
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
+      <Link
+        color="inherit"
+        href="https://github.com/SSathu/Magma-soen341project2023"
+      >
         CareerHub
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -59,53 +65,52 @@ function Copyright(props) {
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
+  transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
+    position: "relative",
+    whiteSpace: "nowrap",
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: "border-box",
+    ...(!open && {
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
+        duration: theme.transitions.duration.leavingScreen,
       }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }),
-);
+      width: theme.spacing(7),
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing(9),
+      },
+    }),
+  },
+}));
 
 const mdTheme = createTheme();
 
 function DashboardContent() {
-
   const [users, setUsers] = React.useState(null);
 
   async function getUsers() {
@@ -113,30 +118,27 @@ function DashboardContent() {
     let body = await result.json();
 
     setUsers(body);
-
   }
-
 
   React.useEffect(() => {
     getUsers();
   }, []);
 
-
-  const [firstname, setFirstName] = useState('')
-  const [lastname, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [country, setCountry] = useState('')
-  const [postalCode, setPostalCode] = useState('')
-  const [bio, setBio] = useState('')
-  const [city, setCity] = useState('')
-  const [phone, setPhone] = useState('')
-
+  const [firstname, setFirstName] = useState("");
+  const [lastname, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [bio, setBio] = useState("");
+  const [city, setCity] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
 
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [salary, setSalary] = React.useState('');
+  const [salary, setSalary] = React.useState("");
 
   const handleSalaryChange = (event) => {
     const value = event.target.value;
@@ -145,43 +147,54 @@ function DashboardContent() {
     }
   };
   const handleSubmit = async () => {
-
     const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
 
     const loggedInJobPostingId = loggedInJobPosting.id;
 
     if (loggedInJobPosting) {
-      console.log(`The ID of the logged in job posting is: ${loggedInJobPostingId}`);
+      console.log(
+        `The ID of the logged in job posting is: ${loggedInJobPostingId}`
+      );
     } else {
-      console.log('No job posting found where loggedIn is true.');
+      console.log("No job posting found where loggedIn is true.");
     }
 
     try {
-      const response = await fetch('/api/editProfil', {
-        method: 'POST',
+      const response = await fetch("/api/editProfil", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({  loggedInJobPostingId, firstname, lastname, email, country, postalCode, bio, city , phone}),
+        body: JSON.stringify({
+          loggedInJobPostingId,
+          firstname,
+          lastname,
+          email,
+          country,
+          postalCode,
+          bio,
+          city,
+          phone,
+          password,
+        }),
       });
 
       const data = await response.json();
       console.log("this is the json");
-      console.log(data)
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
-
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              pr: "24px", // keep right padding when drawer closed
             }}
           >
             <IconButton
@@ -190,8 +203,8 @@ function DashboardContent() {
               aria-label="open drawer"
               onClick={toggleDrawer}
               sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
+                marginRight: "36px",
+                ...(open && { display: "none" }),
               }}
             >
               <MenuIcon />
@@ -215,9 +228,9 @@ function DashboardContent() {
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
               px: [1],
             }}
           >
@@ -236,29 +249,33 @@ function DashboardContent() {
           component="main"
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
+              theme.palette.mode === "light"
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            height: "100vh",
+            overflow: "auto",
           }}
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-
             <Box
               sx={{
                 marginTop: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
             >
               <Typography component="h1" variant="h5">
                 Edit Profile
               </Typography>
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Box
+                component="form"
+                noValidate
+                onSubmit={handleSubmit}
+                sx={{ mt: 3 }}
+              >
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <TextField
@@ -282,7 +299,6 @@ function DashboardContent() {
                       autoComplete="last-Name"
                       variant="standard"
                       onChange={(event) => setLastName(event.target.value)}
-
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -295,9 +311,22 @@ function DashboardContent() {
                       autoComplete="email"
                       variant="standard"
                       onChange={(event) => setEmail(event.target.value)}
-
                     />
                   </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      id="password"
+                      name="password"
+                      label="Password"
+                      fullWidth
+                      autoComplete="password"
+                      variant="standard"
+                      onChange={(event) => setPassword(event.target.value)}
+                    />
+                  </Grid>
+
                   <Grid item xs={6}>
                     <TextField
                       required
@@ -308,11 +337,10 @@ function DashboardContent() {
                       autoComplete="number"
                       variant="standard"
                       inputProps={{
-                        inputMode: 'numeric',
-                        pattern: '[0-9]*'
+                        inputMode: "numeric",
+                        pattern: "[0-9]*",
                       }}
                       onChange={(event) => setPhone(event.target.value)}
-
                     />
                   </Grid>
                   <Grid item xs={4}>
@@ -325,7 +353,6 @@ function DashboardContent() {
                       autoComplete="city"
                       variant="standard"
                       onChange={(event) => setCity(event.target.value)}
-
                     />
                   </Grid>
                   <Grid item xs={4}>
@@ -338,7 +365,6 @@ function DashboardContent() {
                       autoComplete="country"
                       variant="standard"
                       onChange={(event) => setCountry(event.target.value)}
-
                     />
                   </Grid>
                   <Grid item xs={4}>
@@ -351,7 +377,6 @@ function DashboardContent() {
                       autoComplete="postalCode"
                       variant="standard"
                       onChange={(event) => setPostalCode(event.target.value)}
-
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -367,48 +392,42 @@ function DashboardContent() {
                       maxRows={10}
                       inputProps={{
                         style: {
-                          minHeight: '60px',
+                          minHeight: "60px",
                         },
                       }}
                       InputLabelProps={{
                         shrink: true,
                       }}
                       onChange={(event) => setBio(event.target.value)}
-
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <Button>
-                      Upload a resume
-                    </Button>
+                    <Button>Upload a resume</Button>
                   </Grid>
-
                 </Grid>
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
-                  color='custom'
+                  color="custom"
                   sx={{ mt: 3, mb: 2 }}
                 >
+                  {/* <Link href="/profile" passHref>
+                    Save Changes
+                  </Link> */}
                   Save Changes
                 </Button>
-                <Grid container justifyContent="flex-end">
-
-                </Grid>
+                <Grid container justifyContent="flex-end"></Grid>
               </Box>
             </Box>
 
             <Copyright sx={{ pt: 4 }} />
           </Container>
-
-
         </Box>
       </Box>
     </ThemeProvider>
   );
 }
-
 
 export default function Dashboard() {
   return <DashboardContent />;

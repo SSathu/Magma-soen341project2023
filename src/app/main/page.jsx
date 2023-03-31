@@ -30,8 +30,6 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 // import filteredItems from "./filteredItems";
 
-
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -68,8 +66,6 @@ function Copyright(props) {
 }
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const drawerWidth = 240;
-
-
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -124,15 +120,12 @@ function DashboardContent() {
   const [filteredData, setfilteredData] = useState([]);
 
   const inputHandler = (event) => {
-
-    const searchedWord = event.target.value
+    const searchedWord = event.target.value;
     const newFilter = postings.filter((value) => {
       return value.jobTitle.toLowerCase().includes(searchedWord.toLowerCase());
-
-
     });
-    setfilteredData(newFilter)
-  }
+    setfilteredData(newFilter);
+  };
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -147,16 +140,12 @@ function DashboardContent() {
   }
 
   async function getFilteredJobs() {
-    Filter = <input type="text" />
-
+    Filter = <input type="text" />;
   }
-
 
   React.useEffect(() => {
     getPostings();
   }, []);
-
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -242,53 +231,50 @@ function DashboardContent() {
         >
           <Toolbar />
 
-          {
-            filteredData.length != 0 && (
-
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            < Container sx={{ py: 5 }} maxWidth="md">
-              <Grid container spacing={4}>
-                {filteredData && filteredData.map((jobPosting) => (
-                  <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-                    <CardContent sx={{ flexGrow: 4 }}>
-                      <JobCard
-                        sx={{
-                          height: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                        posting={jobPosting}
-                        key={jobPosting.id}
-                      />
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        component="h2"
-                        style={{ color: "black" }}
-                      >
-                        {jobPosting.jobTitle}
-                      </Typography>
-                      <Typography style={{ color: "black" }}>
-                        {jobPosting.jobDescription}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button size="small">View</Button>
-                      <Button size="small">Apply</Button>
-                    </CardActions>
-                  </Grid>
-
-                ))}
-              </Grid>
+          {filteredData.length != 0 && (
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+              <Container sx={{ py: 5 }} maxWidth="md">
+                <Grid container spacing={4}>
+                  {filteredData &&
+                    filteredData.map((jobPosting) => (
+                      <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
+                        <CardContent sx={{ flexGrow: 4 }}>
+                          <JobCard
+                            sx={{
+                              height: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                            posting={jobPosting}
+                            key={jobPosting.id}
+                          />
+                          <Typography
+                            gutterBottom
+                            variant="h5"
+                            component="h2"
+                            style={{ color: "black" }}
+                          >
+                            {jobPosting.jobTitle}
+                          </Typography>
+                          <Typography style={{ color: "black" }}>
+                            {jobPosting.jobDescription}
+                          </Typography>
+                        </CardContent>
+                        <CardActions>
+                          <Button size="small">View</Button>
+                          <Button size="small">Apply</Button>
+                        </CardActions>
+                      </Grid>
+                    ))}
+                </Grid>
+              </Container>
             </Container>
-          </Container>
-                )}
+          )}
         </Box>
       </Box>
-    </ThemeProvider >
+    </ThemeProvider>
   );
 }
-
 
 export default function Dashboard() {
   return <DashboardContent />;

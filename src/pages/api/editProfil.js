@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
 
-  const { loggedInJobPostingId, firstname, lastname, email, country, postalCode, bio, city , phone } = req.body;
+  const { loggedInJobPostingId, firstname, lastname, email, country, postalCode, bio, city , phone, password } = req.body;
 
   try {
     const data = {};
@@ -20,9 +20,7 @@ export default async function handler(req, res) {
     if (email !== '') {
       data.Email = email;
     }
-    if (email !== '') {
-      data.Email = email;
-    }
+
     if (country !== '') {
       data.Country = country;
     }
@@ -37,6 +35,9 @@ export default async function handler(req, res) {
     }
     if (phone !== '') {
       data.PhoneNumber = phone;
+    }
+    if (password !== '') {
+      data.Password = password;
     }
   
     if (Object.keys(data).length > 0) {
