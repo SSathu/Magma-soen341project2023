@@ -1,5 +1,5 @@
 "use client";
-// import { React, useState } from "react";
+
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -10,42 +10,23 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./list";
 import { Button } from "@mui/material";
 import JobCard from "../Components/JobCard";
-// import SearchBar from "../Components/SearchBar";
 import Grid from "@mui/material/Grid";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-// import filteredItems from "../Components/filteredItems";
-// import TextField from "@mui/material/TextField";
-// import searchbar from "../components/searchbar.css"
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-// import filteredItems from "./filteredItems";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#FFFFFF",
-      main: "#2bbcc2",
-      dark: "#FFFFFF",
-      contrastText: "#FFFFFF",
-    },
-    custom: {
-      light: "#FFFFFF",
-      main: "#2bbcc2",
-      dark: "#FFFFFF",
-      contrastText: "#FFFFFF",
-    },
-  },
-});
+
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function Copyright(props) {
   return (
@@ -114,6 +95,39 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
+  const [mode, setMode] = React.useState('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          primary: {
+            light: '#757ce8',
+            main: '#3f50b5',
+            dark: '#002884',
+            contrastText: '#fff',
+          },
+          secondary: {
+            light: '#ff7961',
+            main: '#f44336',
+            dark: '#ba000d',
+            contrastText: '#000',
+          },
+          mode ,
+        },
+      }),
+    [mode],
+  );
+
+
   const [open, setOpen] = React.useState(true);
   const [postings, setPostings] = React.useState(null);
 
@@ -148,6 +162,7 @@ function DashboardContent() {
   }, []);
 
   return (
+    <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -190,11 +205,9 @@ function DashboardContent() {
               </div>
             </div>
 
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -273,6 +286,7 @@ function DashboardContent() {
         </Box>
       </Box>
     </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 

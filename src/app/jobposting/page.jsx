@@ -16,33 +16,16 @@ import TextField from '@mui/material/TextField';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from '../main/list';
 import { useState } from 'react';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
-const theme = createTheme({
-
-  palette: {
-    primary:{
-      light: '#FFFFFF',
-      main: '#2bbcc2',
-      dark: '#FFFFFF',
-      contrastText: '#FFFFFF',
-    },
-    custom: {
-      light: '#FFFFFF',
-      main: '#2bbcc2',
-      dark: '#FFFFFF',
-      contrastText: '#FFFFFF',
-    }
-  },
-  
-});
 
 function Copyright(props) {
   return (
@@ -107,6 +90,38 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
 
+  const [mode, setMode] = React.useState('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          primary: {
+            light: '#757ce8',
+            main: '#3f50b5',
+            dark: '#002884',
+            contrastText: '#fff',
+          },
+          secondary: {
+            light: '#ff7961',
+            main: '#f44336',
+            dark: '#ba000d',
+            contrastText: '#000',
+          },
+          mode ,
+        },
+      }),
+    [mode],
+  );
+
   const [formData, setFormData] = useState({
     companyname:'', 
     jobtitle:'',
@@ -166,6 +181,7 @@ setError("Worked")    }
 
 
   return (
+    <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
@@ -196,11 +212,9 @@ setError("Worked")    }
             >
               CareerHub
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -351,6 +365,7 @@ setError("Worked")    }
         </Box>
       </Box>
     </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
