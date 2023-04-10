@@ -32,19 +32,22 @@ function Copyright(props) {
 }
 
 const theme = createTheme({
-
+  
   palette: {
     primary: {
-      main: '#2bbcc2',
+      light: '#757ce8',
+      main: '#3f50b5',
+      dark: '#002884',
+      contrastText: '#fff',
     },
-    custom: {
-      light: '#FFFFFF',
-      main: '#2bbcc2',
-      dark: '#FFFFFF',
-      contrastText: '#FFFFFF',
-    }
+    secondary: {
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
+    },
   },
-  
+
 });
 
 export default function SignInSide() {
@@ -165,7 +168,6 @@ export default function SignInSide() {
               {error}
             </Typography>
               <Button
-                color = "custom"
                 type="submit"
                 fullWidth
                 variant="contained"

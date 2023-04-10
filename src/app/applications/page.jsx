@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -13,40 +12,24 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "../main/list";
-import Avatar from "@mui/material/Avatar";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#FFFFFF",
-      main: "#2bbcc2",
-      dark: "#FFFFFF",
-      contrastText: "#FFFFFF",
-    },
-    custom: {
-      light: "#FFFFFF",
-      main: "#2bbcc2",
-      dark: "#FFFFFF",
-      contrastText: "#FFFFFF",
-    },
-  },
-});
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
 
 function Copyright(props) {
   return (
@@ -121,6 +104,38 @@ function createData(name, position, status) {
 }
 
 function DashboardContent() {
+
+  const [mode, setMode] = React.useState('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          primary: {
+            light: '#757ce8',
+            main: '#3f50b5',
+            dark: '#002884',
+            contrastText: '#fff',
+          },
+          secondary: {
+            light: '#ff7961',
+            main: '#f44336',
+            dark: '#ba000d',
+            contrastText: '#000',
+          },
+          mode ,
+        },
+      }),
+    [mode],
+  );
   const [users, setUsers] = React.useState(null);
 
   async function getUsers() {
@@ -180,6 +195,7 @@ function DashboardContent() {
     createData("Google", "SOFTWARE DEVELOPER", "Accepted"),
   ];
   return (
+    <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -210,11 +226,11 @@ function DashboardContent() {
             >
               CareerHub
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            
+            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
+
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -334,6 +350,7 @@ function DashboardContent() {
         </Box>
       </Box>
     </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 }
 
