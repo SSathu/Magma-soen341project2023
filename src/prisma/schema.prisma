@@ -41,3 +41,11 @@ model Postings {
   // userId Int
 }
 
+model Applications{
+    id             Int    @id @default(autoincrement())
+    Email          String
+    JobId          Int
+    Viewed         Boolean  @default(false)
+    Accepted       Boolean  @default(false)
+}
+
