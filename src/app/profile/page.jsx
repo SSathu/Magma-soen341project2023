@@ -283,7 +283,6 @@ function DashboardContent() {
                       type="submit"
                       fullWidth
                       variant="contained"
-                      color='custom'
                       sx={{ mt: 3, mb: 2 }}
                     >
                       View Application
