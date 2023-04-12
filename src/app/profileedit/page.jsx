@@ -22,6 +22,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../main/list";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useUsers } from '../Components/userApi';
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -127,19 +128,25 @@ function DashboardContent() {
       }),
     [mode],
   );
-  const [users, setUsers] = React.useState(null);
 
-  async function getUsers() {
-    let result = await fetch("/api/readUsers");
-    let body = await result.json();
 
-    setUsers(body);
-  }
+  // const [users, setUsers] = React.useState(null);
 
-  React.useEffect(() => {
-    getUsers();
-  }, []);
+  // async function getUsers() {
+  //   let result = await fetch("/api/readUsers");
+  //   let body = await result.json();
 
+  //   setUsers(body);
+  // }
+
+  // React.useEffect(() => {
+  //   getUsers();
+  // }, []);
+
+  const users = useUsers();
+
+
+  
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -448,3 +455,4 @@ function DashboardContent() {
 export default function Dashboard() {
   return <DashboardContent />;
 }
+
