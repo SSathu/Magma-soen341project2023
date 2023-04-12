@@ -27,6 +27,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { RepeatOneSharp } from "@mui/icons-material";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -153,14 +154,28 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [salary, setSalary] = React.useState("");
 
-  const handleSalaryChange = (event) => {
-    const value = event.target.value;
-    if (/^[0-9]*$/.test(value)) {
-      setSalary(value);
-    }
-  };
+  const [rows, setRows] = React.useState([]);
+
+ React.useEffect(() => {
+  fetch("/api/GetAppStudent")
+    .then((response) => response.json())
+    .then((data) => {
+      const formattedData = data.map((item) => {
+        return {
+          CompanyName: item.CompanyName,
+          jobTitle: item.jobTitle,
+          Viewed: item.Viewed,
+          Accepted: item.Accepted,
+        };
+      });
+      createData(formattedData);
+      setRows(formattedData);
+    });
+}, []);
+
+ 
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -188,12 +203,7 @@ function DashboardContent() {
     },
   }));
 
-  const rows = [
-    createData("Facebook", "FRONT END", "Accepted"),
-    createData("Amazon", "DEV OPS", "In process"),
-    createData("Microsoft", "SOFTWARE TESTER", "Denied"),
-    createData("Google", "SOFTWARE DEVELOPER", "Accepted"),
-  ];
+ 
   return (
     <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
@@ -306,9 +316,12 @@ function DashboardContent() {
                                 Job Position
                               </StyledTableCell>
                               <StyledTableCell align="left">
-                                Status
+                                Viewed
                               </StyledTableCell>
-                              <StyledTableCell align="right"></StyledTableCell>
+                              <StyledTableCell align="right">
+                                Accepted
+                              </StyledTableCell>
+                              
                               <StyledTableCell align="right"></StyledTableCell>
                             </TableRow>
                           </TableHead>
