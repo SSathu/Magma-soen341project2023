@@ -24,9 +24,10 @@ import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useUsers } from '../Components/userApi';
 
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 
 function Copyright(props) {
   return (
@@ -95,6 +96,10 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
+
+  const users = useUsers();
+
+
   const [mode, setMode] = React.useState('light');
   const colorMode = React.useMemo(
     () => ({
@@ -121,7 +126,7 @@ function DashboardContent() {
             dark: '#ba000d',
             contrastText: '#000',
           },
-          mode ,
+          mode,
         },
       }),
     [mode],
@@ -161,131 +166,165 @@ function DashboardContent() {
     getPostings();
   }, []);
 
+  
+
+
+  async function applyToJob(jobPosting) {
+    
+    const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
+
+    const loggedInJobPostingEmail = loggedInJobPosting.Email;
+    
+    const requestBody = {email: loggedInJobPostingEmail, jobid: jobPosting.id, Viewed: false, Accepted: false };
+    try {
+      const response = await fetch('/api/Apply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.json();
+      console.log(data);
+      // If the application was submitted successfully, update the button text to "Applied"
+      if (data.message === 'Application submitted successfully') {
+        const button = document.getElementById(`apply-button-${jobPosting.id}`);
+        if (button) {
+          button.textContent = 'Applied';
+          button.disabled = true;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <ColorModeContext.Provider value={colorMode}>
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: "24px", // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
+      <ThemeProvider theme={theme}>
+        <Box sx={{ display: "flex" }}>
+          <CssBaseline />
+          <AppBar position="absolute" open={open}>
+            <Toolbar
               sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
+                pr: "24px", // keep right padding when drawer closed
               }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              CareerHub
-            </Typography>
-            <div className="main">
-              <div className="search">
-                <TextField
-                  id="outlined-basic"
-                  onChange={inputHandler}
-                  variant="outlined"
-                  fullWidth
-                  label="Search"
-                />
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: "36px",
+                  ...(open && { display: "none" }),
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                sx={{ flexGrow: 1 }}
+              >
+                CareerHub
+              </Typography>
+              <div className="main">
+                <div className="search">
+                  <TextField
+                    id="outlined-basic"
+                    onChange={inputHandler}
+                    variant="outlined"
+                    fullWidth
+                    label="Search"
+                  />
+                </div>
               </div>
-            </div>
 
-      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
+              <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Drawer variant="permanent" open={open}>
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                px: [1],
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+              {mainListItems}
+              <Divider sx={{ my: 1 }} />
+              {secondaryListItems}
+            </List>
+          </Drawer>
+          <Box
+            component="main"
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
+              flexGrow: 1,
+              height: "100vh",
+              overflow: "auto",
             }}
           >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Toolbar />
+            <Toolbar />
 
-          {filteredData.length != 0 && (
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <Container sx={{ py: 5 }} maxWidth="md">
-                <Grid container spacing={4}>
-                  {filteredData &&
-                    filteredData.map((jobPosting) => (
-                      <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-                        <CardContent sx={{ flexGrow: 4 }}>
-                          <JobCard
-                            sx={{
-                              height: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                            posting={jobPosting}
-                            key={jobPosting.id}
-                          />
-                          <Typography
-                            gutterBottom
-                            variant="h5"
-                            component="h2"
-                            style={{ color: "black" }}
-                          >
-                            {jobPosting.jobTitle}
-                          </Typography>
-                          <Typography style={{ color: "black" }}>
-                            {jobPosting.jobDescription}
-                          </Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button size="small">View</Button>
-                          <Button size="small">Apply</Button>
-                        </CardActions>
-                      </Grid>
-                    ))}
-                </Grid>
+            {filteredData.length != 0 && (
+              <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Container sx={{ py: 5 }} maxWidth="md">
+                  <Grid container spacing={4}>
+                    {filteredData &&
+                      filteredData.map((jobPosting) => (
+                        <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
+                          <CardContent sx={{ flexGrow: 4 }}>
+                            <JobCard
+                              sx={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                              posting={jobPosting}
+                              key={jobPosting.id}
+                            />
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="h2"
+                              style={{ color: "black" }}
+                            >
+                              {jobPosting.jobTitle}
+                            </Typography>
+                            <Typography style={{ color: "black" }}>
+                              {jobPosting.jobDescription}
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button size="small">View</Button>
+                            <Button size="small" id = {`apply-button-${jobPosting.id}`} onClick={() => applyToJob(jobPosting)}
+                            >Apply</Button>
+                          </CardActions>
+                        </Grid>
+                      ))}
+                  </Grid>
+                </Container>
               </Container>
-            </Container>
-          )}
+            )}
+          </Box>
         </Box>
-      </Box>
-    </ThemeProvider>
+      </ThemeProvider>
     </ColorModeContext.Provider>
   );
 }
