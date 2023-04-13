@@ -279,7 +279,7 @@ function DashboardContent() {
                       <Button>
                         <Link href="/profileedit" passHref>
                           
-                           Edit Profil
+                           Edit Profile
                           
                         </Link>
                       </Button>
