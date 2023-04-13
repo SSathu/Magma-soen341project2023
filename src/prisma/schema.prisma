@@ -43,8 +43,13 @@ model Postings {
 
 model Applications{
     id             Int    @id @default(autoincrement())
-    Email          String
+    EmployerEmail          String
+    StudentEmail    String
+    FirstName      String
+    LastName       String
     JobId          Int
+    JobTitle       String
+    CompanyName     String
     Viewed         Boolean  @default(false)
     Accepted       Boolean  @default(false)
 }

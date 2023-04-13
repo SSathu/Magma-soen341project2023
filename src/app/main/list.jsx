@@ -16,6 +16,12 @@ export const mainListItems = (
       <ListItemIcon>
         <AiFillFolderOpen size={25} />
       </ListItemIcon>
+      <ListItemText primary="Browse Postings"/>
+    </ListItemButton>
+    <ListItemButton onClick={handleApplications}>
+      <ListItemIcon>
+        <AiFillFolderOpen size={25} />
+      </ListItemIcon>
       <ListItemText primary="Applications"/>
     </ListItemButton>
     <ListItemButton href="/profile">
@@ -64,4 +70,21 @@ async function handleSubmit(){
     window.location.href = '/logIn'
   }
 };
+
+async function handleApplications(){
+
+    let result = await fetch("/api/UserType");
+    let body = await result.json();
+
+    if(body == "student"){
+      window.location.href = '/applications'
+    }else if(body == "employer"){
+      window.location.href = '/applications2'
+    }else{
+      console.log(json.error);
+    }
+    
+    
+};
+
 
