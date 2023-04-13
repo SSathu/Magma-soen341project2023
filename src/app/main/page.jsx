@@ -27,7 +27,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useUsers } from '../Components/userApi';
 
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function Copyright(props) {
   return (
@@ -101,18 +101,22 @@ function DashboardContent() {
 
 
   const [mode, setMode] = React.useState('light');
+
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
+        localStorage.setItem("mode",mode=== 'light' ? 'dark' : 'light' );
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
       },
     }),
     [],
   );
 
+ 
   const theme = React.useMemo(
     () =>
       createTheme({
+
         palette: {
           primary: {
             light: '#757ce8',
@@ -166,7 +170,12 @@ function DashboardContent() {
     getPostings();
   }, []);
 
-  
+  React.useEffect(()=>{
+    if( localStorage.getItem("mode")){
+     setMode(localStorage.getItem("mode"))
+      }
+ },[]);
+
 
 
   async function applyToJob(jobPosting) {
