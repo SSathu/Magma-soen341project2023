@@ -30,12 +30,13 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Post a Job" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton href="/jobposting">
       <ListItemIcon>
-        <FiSettings size={25} />
+        <WorkIcon size={25} />
       </ListItemIcon>
-      <ListItemText primary="Settings" />
+      <ListItemText primary="Company Review" />
     </ListItemButton>
+    
     <ListItemButton onClick={handleSubmit}>
       <ListItemIcon>
         <HiOutlineLogout size={25} />
