@@ -1,0 +1,27 @@
+// userApi.js
+import React from 'react';
+import { useState } from 'react';
+
+export async function getApplications() {
+
+    let result = await fetch("/api/GetAppStudent");
+    let body = await result.json();
+  
+    return body;
+  }
+  
+ export function useApplications() {
+    const [applications, setApplications] = React.useState(null);
+  
+    if (!applications) {
+        React.useEffect(() => {
+            getApplications().then(data => {
+                setApplications(data);
+            });
+        }, []);
+    }
+  
+    return applications;
+}
+
+  
