@@ -248,6 +248,7 @@ function DashboardContent() {
                     variant="outlined"
                     fullWidth
                     label="Search"
+                    color = "secondary"
                   />
                 </div>
               </div>
