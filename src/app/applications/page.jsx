@@ -27,6 +27,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -352,7 +353,11 @@ function DashboardContent() {
                                 <StyledTableCell align="left">
                                   {row.status}
                                 </StyledTableCell>
-                                <StyledTableCell align="right"></StyledTableCell>
+                                <StyledTableCell align="right">
+                                  <Button>
+                                  <DeleteIcon />
+                                  </Button>
+                                </StyledTableCell>
                                 <StyledTableCell align="right"></StyledTableCell>
                               </StyledTableRow>
                             ))}

@@ -9,7 +9,6 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -22,12 +21,18 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useUsers } from '../Components/userApi';
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useUsers } from "../Components/userApi";
+import PropTypes from "prop-types";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
-
-const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function Copyright(props) {
   return (
@@ -95,19 +100,60 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+function BootstrapDialogTitle(props) {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+}
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
+
 function DashboardContent() {
-
   const users = useUsers();
+  // const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState("light");
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
-    [],
+    []
   );
 
   const theme = React.useMemo(
@@ -115,23 +161,22 @@ function DashboardContent() {
       createTheme({
         palette: {
           primary: {
-            light: '#757ce8',
-            main: '#3f50b5',
-            dark: '#002884',
-            contrastText: '#fff',
+            light: "#757ce8",
+            main: "#3f50b5",
+            dark: "#002884",
+            contrastText: "#fff",
           },
           secondary: {
-            light: '#ff7961',
-            main: '#f44336',
-            dark: '#ba000d',
-            contrastText: '#000',
+            light: "#ff7961",
+            main: "#f44336",
+            dark: "#ba000d",
+            contrastText: "#000",
           },
           mode,
         },
       }),
-    [mode],
+    [mode]
   );
-
 
   const [open, setOpen] = React.useState(true);
   const [postings, setPostings] = React.useState(null);
@@ -166,31 +211,32 @@ function DashboardContent() {
     getPostings();
   }, []);
 
-  
-
-
   async function applyToJob(jobPosting) {
-    
     const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
 
     const loggedInJobPostingEmail = loggedInJobPosting.Email;
-    
-    const requestBody = {email: loggedInJobPostingEmail, jobid: jobPosting.id, Viewed: false, Accepted: false };
+
+    const requestBody = {
+      email: loggedInJobPostingEmail,
+      jobid: jobPosting.id,
+      Viewed: false,
+      Accepted: false,
+    };
     try {
-      const response = await fetch('/api/Apply', {
-        method: 'POST',
+      const response = await fetch("/api/Apply", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
       });
       const data = await response.json();
       console.log(data);
       // If the application was submitted successfully, update the button text to "Applied"
-      if (data.message === 'Application submitted successfully') {
+      if (data.message === "Application submitted successfully") {
         const button = document.getElementById(`apply-button-${jobPosting.id}`);
         if (button) {
-          button.textContent = 'Applied';
+          button.textContent = "Applied";
           button.disabled = true;
         }
       }
@@ -243,8 +289,16 @@ function DashboardContent() {
                 </div>
               </div>
 
-              <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              <IconButton
+                sx={{ ml: 1 }}
+                onClick={colorMode.toggleColorMode}
+                color="inherit"
+              >
+                {theme.palette.mode === "dark" ? (
+                  <Brightness7Icon />
+                ) : (
+                  <Brightness4Icon />
+                )}
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -312,10 +366,55 @@ function DashboardContent() {
                             </Typography>
                           </CardContent>
                           <CardActions>
-                            <Button size="small">View</Button>
-                            <Button size="small" id = {`apply-button-${jobPosting.id}`} onClick={() => applyToJob(jobPosting)}
-                            >Apply</Button>
+                            <Button size="small" onClick={handleClickOpen}>
+                              View
+                            </Button>
+                            <Button
+                              size="small"
+                              id={`apply-button-${jobPosting.id}`}
+                              onClick={() => applyToJob(jobPosting)}
+                            >
+                              Apply
+                            </Button>
                           </CardActions>
+                          <BootstrapDialog
+                            onClose={handleClose}
+                            aria-labelledby="customized-dialog-title"
+                            open={open}
+                          >
+                            <BootstrapDialogTitle
+                              id="customized-dialog-title"
+                              onClose={handleClose}
+                            >
+                              Company name
+                            </BootstrapDialogTitle>
+                            <DialogContent dividers>
+                              <Typography variant="h6" gutterBottom>
+                                Job Description
+                              </Typography>
+                              <Typography gutterBottom>
+                                Cras mattis consectetur purus sit amet
+                                fermentum. Cras justo odio, dapibus ac facilisis
+                                in, egestas eget quam. Morbi leo risus, porta ac
+                                consectetur ac, vestibulum at eros.
+                              </Typography>
+
+                              <Typography variant="h6" gutterBottom>
+                                Job Location
+                              </Typography>
+                              <Typography gutterBottom>
+                               Montreal, Quebec
+                              </Typography>
+
+                              <Typography variant="h6" gutterBottom>
+                                Salary
+                              </Typography>
+                              <Typography gutterBottom>
+                              20$/hour
+                              </Typography>
+                            </DialogContent>
+                            <DialogActions></DialogActions>
+                          </BootstrapDialog>
                         </Grid>
                       ))}
                   </Grid>
