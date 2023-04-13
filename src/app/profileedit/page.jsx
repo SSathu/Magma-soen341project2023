@@ -432,19 +432,18 @@ function DashboardContent() {
                       onChange={(event) => setBio(event.target.value)}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <Button>Upload a resume</Button>
-                  </Grid>
                 </Grid>
+                <Button variant="contained" component="label" sx={{ mt: 3, mb: 2 }}>
+                      Upload a Resume
+                      <input hidden accept="image/*" multiple type="file" />
+                    </Button>
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  {/* <Link href="/profile" passHref>
-                    Save Changes
-                  </Link> */}
+                 
                   Save Changes
                 </Button>
                 <Grid container justifyContent="flex-end"></Grid>
