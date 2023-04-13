@@ -126,6 +126,7 @@ function DashboardContent() {
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
+        localStorage.setItem("mode",mode=== 'light' ? 'dark' : 'light' );
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
       },
     }),
@@ -165,6 +166,12 @@ function DashboardContent() {
   React.useEffect(() => {
     getUsers();
   }, []);
+
+  React.useEffect(()=>{
+    if( localStorage.getItem("mode")){
+     setMode(localStorage.getItem("mode"))
+      }
+ },[]);
 
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
