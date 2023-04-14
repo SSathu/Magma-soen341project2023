@@ -16,6 +16,7 @@ export const mainListItems = (
       <ListItemIcon>
         <AiFillFolderOpen size={25} />
       </ListItemIcon>
+
       <ListItemText primary="Browse Postings"/>
     </ListItemButton>
     <ListItemButton onClick={handleApplications}>
@@ -23,6 +24,7 @@ export const mainListItems = (
         <AiFillFolderOpen size={25} />
       </ListItemIcon>
       <ListItemText primary="Applications"/>
+
     </ListItemButton>
     <ListItemButton href="/profile">
       <ListItemIcon>
@@ -36,7 +38,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Post a Job" />
     </ListItemButton>
-    <ListItemButton href="/jobposting">
+    <ListItemButton href="/companylist">
       <ListItemIcon>
         <WorkIcon size={25} />
       </ListItemIcon>

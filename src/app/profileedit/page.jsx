@@ -20,9 +20,11 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../main/list";
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useUsers } from '../Components/userApi';
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useUsers } from "../Components/userApi";
+import { handleFileUpload } from "./../../pages/api/upload.js";
+import fs from "fs";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -96,16 +98,17 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
-
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState("light");
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
+
         localStorage.setItem("mode",mode=== 'light' ? 'dark' : 'light' );
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+
       },
     }),
-    [],
+    []
   );
 
   const theme = React.useMemo(
@@ -113,23 +116,22 @@ function DashboardContent() {
       createTheme({
         palette: {
           primary: {
-            light: '#757ce8',
-            main: '#3f50b5',
-            dark: '#002884',
-            contrastText: '#fff',
+            light: "#757ce8",
+            main: "#3f50b5",
+            dark: "#002884",
+            contrastText: "#fff",
           },
           secondary: {
-            light: '#ff7961',
-            main: '#f44336',
-            dark: '#ba000d',
-            contrastText: '#000',
+            light: "#ff7961",
+            main: "#f44336",
+            dark: "#ba000d",
+            contrastText: "#000",
           },
-          mode ,
+          mode,
         },
       }),
-    [mode],
+    [mode]
   );
-
 
   // const [users, setUsers] = React.useState(null);
 
@@ -146,8 +148,6 @@ function DashboardContent() {
 
   const users = useUsers();
 
-
-  
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -211,205 +211,292 @@ function DashboardContent() {
     }
   };
 
-  React.useEffect(()=>{
-    if( localStorage.getItem("mode")){
-     setMode(localStorage.getItem("mode"))
-      }
- },[]);
+//   const downloadDocument = () => {
+//     const documentUrl = "/my-document.pdf";
+//     window.location.href = documentUrl;
+//   };
+
+  // function handleUploadButtonClick() {
+  //   return <Upload />;
+  // }
+
+  // const [file, setFile] = useState(null);
+
+  // const handleFileChange = (event) => {
+  //   setFile(event.target.files[0]);
+  // };
+
+  // const handleFileUpload = async () => {
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+
+  //   const response = await fetch("/api/upload", {
+  //     method: "POST",
+  //     body: formData,
+  //   });
+
+  //   if (response.ok) {
+  //     console.log("File uploaded successfully.");
+  //   } else {
+  //     console.error("Failed to upload file.");
+  //   }
+  // };
+//   const [file, setFile] = useState(null);
+
+//   const handleFileChange = (event) => {
+//     setFile(event.target.files[0]);
+//   };
+
+//   const handleFileUpload = () => {
+//     const formData = new FormData();
+//     formData.append("file", file);
+
+//     fetch("/api/upload", {
+//       method: "POST",
+//       body: formData,
+//     })
+//       .then((response) => {
+//         console.log("File uploaded successfully.");
+//       })
+//       .catch((error) => {
+//         console.error("Error uploading file:", error);
+//       });
+//   };
+//   React.useEffect(()=>{
+//     if( localStorage.getItem("mode")){
+//      setMode(localStorage.getItem("mode"))
+//       }
+//  },[]);
 
 
 
   return (
     <ColorModeContext.Provider value={colorMode}>
-    <ThemeProvider theme={theme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: "24px", // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
+      <ThemeProvider theme={theme}>
+        <Box sx={{ display: "flex" }}>
+          <CssBaseline />
+          <AppBar position="absolute" open={open}>
+            <Toolbar
               sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
+                pr: "24px", // keep right padding when drawer closed
               }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              CareerHub
-            </Typography>
-            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
-          </List>
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Box
-              sx={{
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Typography component="h1" variant="h5">
-                Edit Profile
-              </Typography>
-              <Box
-                component="form"
-                noValidate
-                onSubmit={handleSubmit}
-                sx={{ mt: 3 }}
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                  marginRight: "36px",
+                  ...(open && { display: "none" }),
+                }}
               >
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField
-                      required
-                      id="firstName"
-                      name="firstName"
-                      label="First Name"
-                      fullWidth
-                      autoComplete="first-Name"
-                      variant="standard"
-                      onChange={(event) => setFirstName(event.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      required
-                      id="lastName"
-                      name="lastName"
-                      label="Last Name"
-                      fullWidth
-                      autoComplete="last-Name"
-                      variant="standard"
-                      onChange={(event) => setLastName(event.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      id="emal"
-                      name="email"
-                      label="Email address"
-                      fullWidth
-                      autoComplete="email"
-                      variant="standard"
-                      onChange={(event) => setEmail(event.target.value)}
-                    />
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                sx={{ flexGrow: 1 }}
+              >
+                CareerHub
+              </Typography>
+              <IconButton
+                sx={{ ml: 1 }}
+                onClick={colorMode.toggleColorMode}
+                color="inherit"
+              >
+                {theme.palette.mode === "dark" ? (
+                  <Brightness7Icon />
+                ) : (
+                  <Brightness4Icon />
+                )}
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Drawer variant="permanent" open={open}>
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                px: [1],
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+              {mainListItems}
+              <Divider sx={{ my: 1 }} />
+              {secondaryListItems}
+            </List>
+          </Drawer>
+          <Box
+            component="main"
+            sx={{
+              backgroundColor: (theme) =>
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[100]
+                  : theme.palette.grey[900],
+              flexGrow: 1,
+              height: "100vh",
+              overflow: "auto",
+            }}
+          >
+            <Toolbar />
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+              <Box
+                sx={{
+                  marginTop: 8,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography component="h1" variant="h5">
+                  Edit Profile
+                </Typography>
+                <Box
+                  component="form"
+                  noValidate
+                  onSubmit={handleSubmit}
+                  sx={{ mt: 3 }}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <TextField
+                        required
+                        id="firstName"
+                        name="firstName"
+                        label="First Name"
+                        fullWidth
+                        autoComplete="first-Name"
+                        variant="standard"
+                        onChange={(event) => setFirstName(event.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <TextField
+                        required
+                        id="lastName"
+                        name="lastName"
+                        label="Last Name"
+                        fullWidth
+                        autoComplete="last-Name"
+                        variant="standard"
+                        onChange={(event) => setLastName(event.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="emal"
+                        name="email"
+                        label="Email address"
+                        fullWidth
+                        autoComplete="email"
+                        variant="standard"
+                        onChange={(event) => setEmail(event.target.value)}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        id="password"
+                        name="password"
+                        label="Password"
+                        fullWidth
+                        autoComplete="password"
+                        variant="standard"
+                        onChange={(event) => setPassword(event.target.value)}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <TextField
+                        required
+                        id="number"
+                        name="number"
+                        label="Phone number"
+                        fullWidth
+                        autoComplete="number"
+                        variant="standard"
+                        inputProps={{
+                          inputMode: "numeric",
+                          pattern: "[0-9]*",
+                        }}
+                        onChange={(event) => setPhone(event.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <TextField
+                        required
+                        id="city"
+                        name="city"
+                        label="City"
+                        fullWidth
+                        autoComplete="city"
+                        variant="standard"
+                        onChange={(event) => setCity(event.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <TextField
+                        required
+                        id="country"
+                        name="country"
+                        label="Country"
+                        fullWidth
+                        autoComplete="country"
+                        variant="standard"
+                        onChange={(event) => setCountry(event.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <TextField
+                        required
+                        id="postalCode"
+                        name="postalCode"
+                        label="Postal Code"
+                        fullWidth
+                        autoComplete="postalCode"
+                        variant="standard"
+                        onChange={(event) => setPostalCode(event.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="bio"
+                        name="bio"
+                        label="Biography"
+                        fullWidth
+                        autoComplete="bio"
+                        variant="standard"
+                        multiline
+                        minRows={1}
+                        maxRows={10}
+                        inputProps={{
+                          style: {
+                            minHeight: "60px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        onChange={(event) => setBio(event.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <input type="file" onChange={handleFileChange} />
+                      <button onClick={handleFileUpload}>Upload File</button>
+                    </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      id="password"
-                      name="password"
-                      label="Password"
-                      fullWidth
-                      autoComplete="password"
-                      variant="standard"
-                      onChange={(event) => setPassword(event.target.value)}
-                    />
-                  </Grid>
-
-                  <Grid item xs={6}>
-                    <TextField
-                      required
-                      id="number"
-                      name="number"
-                      label="Phone number"
-                      fullWidth
-                      autoComplete="number"
-                      variant="standard"
-                      inputProps={{
-                        inputMode: "numeric",
-                        pattern: "[0-9]*",
-                      }}
-                      onChange={(event) => setPhone(event.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <TextField
-                      required
-                      id="city"
-                      name="city"
-                      label="City"
-                      fullWidth
-                      autoComplete="city"
-                      variant="standard"
-                      onChange={(event) => setCity(event.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <TextField
-                      required
-                      id="country"
-                      name="country"
-                      label="Country"
-                      fullWidth
-                      autoComplete="country"
-                      variant="standard"
-                      onChange={(event) => setCountry(event.target.value)}
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <TextField
-                      required
-                      id="postalCode"
-                      name="postalCode"
-                      label="Postal Code"
-                      fullWidth
-                      autoComplete="postalCode"
-                      variant="standard"
-                      onChange={(event) => setPostalCode(event.target.value)}
-                    />
-                  </Grid>
                   <Grid item xs={12}>
                     <TextField
                       id="bio"
@@ -432,30 +519,28 @@ function DashboardContent() {
                       onChange={(event) => setBio(event.target.value)}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <Button>Upload a resume</Button>
-                  </Grid>
                 </Grid>
+                <Button variant="contained" component="label" sx={{ mt: 3, mb: 2 }}>
+                      Upload a Resume
+                      <input hidden accept="image/*" multiple type="file" />
+                    </Button>
                 <Button
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  {/* <Link href="/profile" passHref>
-                    Save Changes
-                  </Link> */}
+                 
                   Save Changes
                 </Button>
                 <Grid container justifyContent="flex-end"></Grid>
               </Box>
-            </Box>
 
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
+              <Copyright sx={{ pt: 4 }} />
+            </Container>
+          </Box>
         </Box>
-      </Box>
-    </ThemeProvider>
+      </ThemeProvider>
     </ColorModeContext.Provider>
   );
 }
@@ -463,4 +548,3 @@ function DashboardContent() {
 export default function Dashboard() {
   return <DashboardContent />;
 }
-
