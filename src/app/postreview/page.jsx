@@ -101,6 +101,7 @@ function DashboardContent() {
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
+        localStorage.setItem("mode",mode=== 'light' ? 'dark' : 'light' );
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
@@ -187,6 +188,12 @@ function DashboardContent() {
     });
   }
   const [value, setValue] = React.useState(2);
+
+  React.useEffect(()=>{
+    if( localStorage.getItem("mode")){
+     setMode(localStorage.getItem("mode"))
+      }
+ },[]);
 
   return (
     <ColorModeContext.Provider value={colorMode}>
