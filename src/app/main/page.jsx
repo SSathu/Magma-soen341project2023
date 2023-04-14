@@ -25,16 +25,15 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useUsers } from "../Components/userApi";
 import PropTypes from "prop-types";
+import CloseIcon from "@mui/icons-material/Close";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -142,32 +141,29 @@ BootstrapDialogTitle.propTypes = {
 
 function DashboardContent() {
   const users = useUsers();
-  // const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpen1(true);
   };
   const handleClose = () => {
-    setOpen(false);
+    setOpen1(false);
   };
 
-
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState("light");
 
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-        localStorage.setItem("mode",mode=== 'light' ? 'dark' : 'light' );
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        localStorage.setItem("mode", mode === "light" ? "dark" : "light");
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
     []
   );
 
- 
   const theme = React.useMemo(
     () =>
       createTheme({
-
         palette: {
           primary: {
             light: "#757ce8",
@@ -220,13 +216,11 @@ function DashboardContent() {
     getPostings();
   }, []);
 
-  React.useEffect(()=>{
-    if( localStorage.getItem("mode")){
-     setMode(localStorage.getItem("mode"))
-      }
- },[]);
-
-
+  React.useEffect(() => {
+    if (localStorage.getItem("mode")) {
+      setMode(localStorage.getItem("mode"));
+    }
+  }, []);
 
   async function applyToJob(jobPosting) {
     const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
@@ -283,8 +277,6 @@ function DashboardContent() {
                   ...(open && { display: "none" }),
                 }}
               >
-
-
                 <MenuIcon />
               </IconButton>
               <Typography
@@ -292,11 +284,11 @@ function DashboardContent() {
                 variant="h6"
                 color="inherit"
                 noWrap
-                sx={{ flexGrow: 1 }}>
+                sx={{ flexGrow: 1 }}
+              >
                 CareerHub
               </Typography>
               <div className="main">
-              
                 <div className="search">
                   <TextField
                     id="outlined-basic"
@@ -304,16 +296,21 @@ function DashboardContent() {
                     variant="outlined"
                     fullWidth
                     label="Search"
-                    color = "secondary"
+                    color="secondary"
                   />
                 </div>
               </div>
 
-
-            
-
-              <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              <IconButton
+                sx={{ ml: 1 }}
+                onClick={colorMode.toggleColorMode}
+                color="inherit"
+              >
+                {theme.palette.mode === "dark" ? (
+                  <Brightness7Icon />
+                ) : (
+                  <Brightness4Icon />
+                )}
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -351,28 +348,28 @@ function DashboardContent() {
           >
             <Toolbar />
 
-          
-              <Container maxWidth="lg" sx={{ mt: 2, mb: 2, ml: 2}}>
-              <label htmlFor="filters"><b>Filters:</b></label>
-                 <select name="filters" id="filters"  sx={{ mt: 30, mb: 20 }}>
-                  <option value="inperson">All Offers</option>
-                     <option value="remote">Most Relevant</option>
-                     <option value="hybrid">Recommended</option>
-                     <option value="hybrid">Most Recent</option>
-               </select>
-              </Container>
+            <Container maxWidth="lg" sx={{ mt: 2, mb: 2, ml: 2 }}>
+              <label htmlFor="filters">
+                <b>Filters:</b>
+              </label>
+              <select name="filters" id="filters" sx={{ mt: 30, mb: 20 }}>
+                <option value="inperson">All Offers</option>
+                <option value="remote">Most Relevant</option>
+                <option value="hybrid">Recommended</option>
+                <option value="hybrid">Most Recent</option>
+              </select>
+            </Container>
 
-              <Container maxWidth="lg" sx={{ mt: 2, mb: 2, ml: 2}}>
-              <label htmlFor="location"><b>Location:</b></label>
-                 <select name="location" id="location"  sx={{ mt: 30, mb: 20 }}>
-                  <option value="inperson">In Person</option>
-                     <option value="remote">Remote</option>
-                     <option value="hybrid">Hybrid</option>
-               </select>
-              </Container>
-
-              
-        
+            <Container maxWidth="lg" sx={{ mt: 2, mb: 2, ml: 2 }}>
+              <label htmlFor="location">
+                <b>Location:</b>
+              </label>
+              <select name="location" id="location" sx={{ mt: 30, mb: 20 }}>
+                <option value="inperson">In Person</option>
+                <option value="remote">Remote</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+            </Container>
 
             {filteredData.length != 0 && (
               <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -399,14 +396,50 @@ function DashboardContent() {
                             >
                               {jobPosting.jobTitle}
                             </Typography>
-                            <Typography style={{ color: "black" }}>
-                              {jobPosting.jobDescription}
-                            </Typography>
                           </CardContent>
                           <CardActions>
                             <Button size="small" onClick={handleClickOpen}>
                               View
                             </Button>
+                            <div>
+                              <BootstrapDialog
+                                onClose={handleClose}
+                                aria-labelledby="customized-dialog-title"
+                                open={open1}
+                              >
+                                <BootstrapDialogTitle
+                                  id="customized-dialog-title"
+                                  onClose={handleClose}
+                                >
+                                  Company Name
+                                </BootstrapDialogTitle>
+                                <DialogContent dividers>
+                                  <Typography variant="h6" gutterBottom>
+                                    Job Description:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    Cras mattis consectetur purus sit amet
+                                    fermentum. Cras justo odio, dapibus ac
+                                    facilisis in, egestas eget quam. Morbi leo
+                                    risus, porta ac consectetur ac, vestibulum
+                                    at eros.
+                                  </Typography>
+
+                                  <Typography variant="h6" gutterBottom>
+                                    Location:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    Montreal, Quebec
+                                  </Typography>
+
+                                  <Typography variant="h6" gutterBottom>
+                                    Salary:
+                                  </Typography>
+                                  <Typography gutterBottom>20$/hour</Typography>
+                                </DialogContent>
+                              </BootstrapDialog>
+                            </div>
+
                             <Button
                               size="small"
                               id={`apply-button-${jobPosting.id}`}
@@ -415,44 +448,6 @@ function DashboardContent() {
                               Apply
                             </Button>
                           </CardActions>
-                          <BootstrapDialog
-                            onClose={handleClose}
-                            aria-labelledby="customized-dialog-title"
-                            open={open}
-                          >
-                            <BootstrapDialogTitle
-                              id="customized-dialog-title"
-                              onClose={handleClose}
-                            >
-                              Company name
-                            </BootstrapDialogTitle>
-                            <DialogContent dividers>
-                              <Typography variant="h6" gutterBottom>
-                                Job Description
-                              </Typography>
-                              <Typography gutterBottom>
-                                Cras mattis consectetur purus sit amet
-                                fermentum. Cras justo odio, dapibus ac facilisis
-                                in, egestas eget quam. Morbi leo risus, porta ac
-                                consectetur ac, vestibulum at eros.
-                              </Typography>
-
-                              <Typography variant="h6" gutterBottom>
-                                Job Location
-                              </Typography>
-                              <Typography gutterBottom>
-                               Montreal, Quebec
-                              </Typography>
-
-                              <Typography variant="h6" gutterBottom>
-                                Salary
-                              </Typography>
-                              <Typography gutterBottom>
-                              20$/hour
-                              </Typography>
-                            </DialogContent>
-                            <DialogActions></DialogActions>
-                          </BootstrapDialog>
                         </Grid>
                       ))}
                   </Grid>
