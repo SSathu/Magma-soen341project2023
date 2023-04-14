@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 export default async function handler(req, res) {
     
   console.log("called handler")  
-  const {email, jobid, Viewed, Accepted } = req.body
+  const {email, jobid, Viewed, Accepted, job } = req.body
 
   try {
     const Applications = await prisma.Applications.create({
@@ -13,7 +13,8 @@ export default async function handler(req, res) {
         Email : email,
         JobId : jobid,
         Viewed: Viewed,
-        Accepted : Accepted
+        Accepted : Accepted,
+        JobTitle : job,
       }
     })
 

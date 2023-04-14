@@ -10,42 +10,47 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-
-
 model User {
-  id           Int      @id @default(autoincrement())
-  FirstName    String
-  LastName     String
-  Email        String
-  Password     String
-  LoggedIn     Boolean  @default(false)
-  PhoneNumber String?     
-  City         String?
-  Country      String?
-  PostalCode   String?
-  Bio          String?
-  Occupation   String?
+  id          Int     @id @default(autoincrement())
+  FirstName   String
+  LastName    String
+  Email       String
+  Password    String
+  LoggedIn    Boolean @default(false)
+  PhoneNumber String?
+  City        String?
+  Country     String?
+  PostalCode  String?
+  Bio         String?
+  Occupation  String?
 }
 
-
 model Postings {
-  id             Int    @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   Email          String
   CompanyName    String
   jobTitle       String?
   jobDescription String?
   Salary         String
   Location       String
-  Image String @default("")
+  Image          String  @default("")
   // user User @relation(fields: [userId], references: [id])
   // userId Int
 }
 
-model Applications{
-    id             Int    @id @default(autoincrement())
-    Email          String
-    JobId          Int
-    Viewed         Boolean  @default(false)
-    Accepted       Boolean  @default(false)
+model Applications {
+  id       Int     @id @default(autoincrement())
+  Email    String
+  JobId    Int
+  Viewed   Boolean @default(false)
+  Accepted Boolean @default(false)
+  JobTitle String?
 }
 
+model File {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String
+  data      Bytes
+  createdAt DateTime @default(now())
+}

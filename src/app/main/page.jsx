@@ -22,12 +22,11 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useUsers } from '../Components/userApi';
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useUsers } from "../Components/userApi";
 
-
-const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function Copyright(props) {
   return (
@@ -96,18 +95,16 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function DashboardContent() {
-
   const users = useUsers();
 
-
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState("light");
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
-    [],
+    []
   );
 
   const theme = React.useMemo(
@@ -115,23 +112,22 @@ function DashboardContent() {
       createTheme({
         palette: {
           primary: {
-            light: '#757ce8',
-            main: '#3f50b5',
-            dark: '#002884',
-            contrastText: '#fff',
+            light: "#757ce8",
+            main: "#3f50b5",
+            dark: "#002884",
+            contrastText: "#fff",
           },
           secondary: {
-            light: '#ff7961',
-            main: '#f44336',
-            dark: '#ba000d',
-            contrastText: '#000',
+            light: "#ff7961",
+            main: "#f44336",
+            dark: "#ba000d",
+            contrastText: "#000",
           },
           mode,
         },
       }),
-    [mode],
+    [mode]
   );
-
 
   const [open, setOpen] = React.useState(true);
   const [postings, setPostings] = React.useState(null);
@@ -166,31 +162,33 @@ function DashboardContent() {
     getPostings();
   }, []);
 
-  
-
-
   async function applyToJob(jobPosting) {
-    
     const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
 
     const loggedInJobPostingEmail = loggedInJobPosting.Email;
-    
-    const requestBody = {email: loggedInJobPostingEmail, jobid: jobPosting.id, Viewed: false, Accepted: false };
+
+    const requestBody = {
+      email: loggedInJobPostingEmail,
+      jobid: jobPosting.id,
+      Viewed: false,
+      Accepted: false,
+      job: jobPosting.jobTitle,
+    };
     try {
-      const response = await fetch('/api/Apply', {
-        method: 'POST',
+      const response = await fetch("/api/Apply", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
       });
       const data = await response.json();
       console.log(data);
       // If the application was submitted successfully, update the button text to "Applied"
-      if (data.message === 'Application submitted successfully') {
+      if (data.message === "Application submitted successfully") {
         const button = document.getElementById(`apply-button-${jobPosting.id}`);
         if (button) {
-          button.textContent = 'Applied';
+          button.textContent = "Applied";
           button.disabled = true;
         }
       }
@@ -243,8 +241,16 @@ function DashboardContent() {
                 </div>
               </div>
 
-              <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              <IconButton
+                sx={{ ml: 1 }}
+                onClick={colorMode.toggleColorMode}
+                color="inherit"
+              >
+                {theme.palette.mode === "dark" ? (
+                  <Brightness7Icon />
+                ) : (
+                  <Brightness4Icon />
+                )}
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -313,8 +319,13 @@ function DashboardContent() {
                           </CardContent>
                           <CardActions>
                             <Button size="small">View</Button>
-                            <Button size="small" id = {`apply-button-${jobPosting.id}`} onClick={() => applyToJob(jobPosting)}
-                            >Apply</Button>
+                            <Button
+                              size="small"
+                              id={`apply-button-${jobPosting.id}`}
+                              onClick={() => applyToJob(jobPosting)}
+                            >
+                              Apply
+                            </Button>
                           </CardActions>
                         </Grid>
                       ))}
