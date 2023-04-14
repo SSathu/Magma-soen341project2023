@@ -10,6 +10,7 @@ export default async function Handler(req, res){
   const applications = await prisma.Applications.findMany()
 
     // console.log(apps);
+    
     res.status(200).json(applications)
 
 

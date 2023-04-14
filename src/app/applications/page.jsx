@@ -25,12 +25,15 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from 'react';
+
+
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
 
 function Copyright(props) {
   return (
@@ -105,7 +108,9 @@ function createData(companyname, jobtitle, status, empemail) {
 }
 
 function DashboardContent() {
+
   const [applications, setApplications] = React.useState(null);
+
 
   async function getApplications() {
     let result = await fetch("/api/Applications");
@@ -115,20 +120,21 @@ function DashboardContent() {
     // console.log(postings);
   }
 
+  
   React.useEffect(() => {
     getApplications();
   }, []);
 
-  const [mode, setMode] = React.useState("light");
+  
+  const [mode, setMode] = React.useState('light');
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-
         localStorage.setItem("mode",mode=== 'light' ? 'dark' : 'light' );
         setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
       },
     }),
-    []
+    [],
   );
 
   const theme = React.useMemo(
@@ -136,21 +142,21 @@ function DashboardContent() {
       createTheme({
         palette: {
           primary: {
-            light: "#757ce8",
-            main: "#3f50b5",
-            dark: "#002884",
-            contrastText: "#fff",
+            light: '#757ce8',
+            main: '#3f50b5',
+            dark: '#002884',
+            contrastText: '#fff',
           },
           secondary: {
-            light: "#ff7961",
-            main: "#f44336",
-            dark: "#ba000d",
-            contrastText: "#000",
+            light: '#ff7961',
+            main: '#f44336',
+            dark: '#ba000d',
+            contrastText: '#000',
           },
-          mode,
+          mode ,
         },
       }),
-    [mode]
+    [mode],
   );
   const [users, setUsers] = React.useState(null);
 
@@ -175,14 +181,7 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [salary, setSalary] = React.useState("");
-
-  const handleSalaryChange = (event) => {
-    const value = event.target.value;
-    if (/^[0-9]*$/.test(value)) {
-      setSalary(value);
-    }
-  };
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -210,129 +209,151 @@ function DashboardContent() {
     },
   }));
 
-
-  // const loggedInJobPostingEmail = loggedInJobPosting.Email;
-
- 
+  const [formData, setFormData] = useState({
+    CompanyName:'', 
+    JobPosition:'',
+    Status:'',
+    EmployerEmail:''
+  });
   const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail)) || [];
+
+  const [error, setError] = useState('');
+
+async function sendInfo(){
+
+  const response = await fetch('/api/DeleteApplication', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 
+      CompanyName: formData.CompanyName, 
+      JobPosition: formData.JobPosition,
+      Status: formData.Status,
+      EmployerEmail: formData.EmployerEmail
+    })
+  });
+  const json = await response.json();
+  if (json.error) {
+    console.log(json.error);
+  } else {
+    window.location.href = '/applications'
+  }
+}
+ 
+  const handleDelete = (row) => {
+    formData.CompanyName = row.companyname;
+    formData.JobPosition = row.jobtitle;
+    formData.Status = row.status;
+    formData.EmployerEmail = row.empemail;
+
+    sendInfo();
+
+  
+
+  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
-          <AppBar position="absolute" open={open}>
-            <Toolbar
-              sx={{
-                pr: "24px", // keep right padding when drawer closed
-              }}
-            >
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                onClick={toggleDrawer}
-                sx={{
-                  marginRight: "36px",
-                  ...(open && { display: "none" }),
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1 }}
-              >
-                CareerHub
-              </Typography>
-
-              <IconButton
-                sx={{ ml: 1 }}
-                onClick={colorMode.toggleColorMode}
-                color="inherit"
-              >
-                {theme.palette.mode === "dark" ? (
-                  <Brightness7Icon />
-                ) : (
-                  <Brightness4Icon />
-                )}
-              </IconButton>
-            </Toolbar>
-          </AppBar>
-          <Drawer variant="permanent" open={open}>
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                px: [1],
-              }}
-            >
-              <IconButton onClick={toggleDrawer}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Toolbar>
-            <Divider />
-            <List component="nav">
-              {mainListItems}
-              <Divider sx={{ my: 1 }} />
-              {secondaryListItems}
-            </List>
-          </Drawer>
-          <Box
-            component="main"
+    <ThemeProvider theme={theme}>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="absolute" open={open}>
+          <Toolbar
             sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
-              flexGrow: 1,
-              height: "100vh",
-              overflow: "auto",
+              pr: "24px", // keep right padding when drawer closed
             }}
           >
-            <Toolbar />
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
+              sx={{
+                marginRight: "36px",
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              CareerHub
+            </Typography>
+            
+            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
 
-            {users &&
-              users
-                .filter((user) => user.LoggedIn === true)
-                // .map((user) => ({
-                //   ...user,
-                //   password: user.password.replace(/./g, '*'),
-                // }))
-                .map((user) => (
-                  <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              px: [1],
+            }}
+          >
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+          <Divider />
+          <List component="nav">
+            {mainListItems}
+            <Divider sx={{ my: 1 }} />
+            {secondaryListItems}
+          </List>
+        </Drawer>
+        <Box
+          component="main"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: "100vh",
+            overflow: "auto",
+          }}
+        >
+          <Toolbar />
+
+          {users &&
+            users
+              .filter((user) => user.LoggedIn === true)
+              // .map((user) => ({
+              //   ...user,
+              //   password: user.password.replace(/./g, '*'),
+              // }))
+              .map((user) => (
+                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                  <Box
+                    sx={{
+                      marginTop: 8,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography component="h1" variant="h5">
+                      My Applications
+                    </Typography>
+
                     <Box
-                      sx={{
-                        marginTop: 8,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                      }}
+                      component="form"
+                      noValidate
+                      onSubmit={handleSubmit}
+                      sx={{ mt: 1 }}
                     >
-                      <Typography component="h1" variant="h5">
-                        My Applications
-                      </Typography>
-
-                      <Box
-                        component="form"
-                        noValidate
-                        onSubmit={handleSubmit}
-                        sx={{ mt: 1 }}
-                      >
-                        <TableContainer component={Paper}>
-                          <Table
-                            sx={{ minWidth: 850 }}
-                            aria-label="customized table"
-                          >
-                            <TableHead>
-                              <TableRow>
-                                <StyledTableCell>Company Name</StyledTableCell>
-                                <StyledTableCell align="left">
-                                  Job Position
+                      <TableContainer component={Paper}>
                         <Table
                           sx={{ minWidth: 850 }}
                           aria-label="customized table"
@@ -363,58 +384,40 @@ function DashboardContent() {
                                   {row.jobtitle}
                                 </StyledTableCell>
                                 <StyledTableCell align="left">
-                                  Status
+                                  {row.status}
                                 </StyledTableCell>
-                                <StyledTableCell align="right">
-                                  <Button>
-                                  <DeleteIcon />
-                                  </Button>
                                 <StyledTableCell align="left">
                                   {row.empemail}
+                                </StyledTableCell>               
+                                <StyledTableCell align="right">
+                                  <Button       onClick={() => handleDelete(row)}>
+                                  <DeleteIcon />
+                                  </Button>
                                 </StyledTableCell>
-                                <StyledTableCell align="right"></StyledTableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {rows
-                                .filter((row) => row.name === user.Email)
-                                .map((row) => (
-                                  <StyledTableRow key={row.name}>
-                                    <StyledTableCell component="th" scope="row">
-                                      {row.name}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="left">
-                                      {row.position}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="left">
-                                      {row.status}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="right"></StyledTableCell>
-                                    <StyledTableCell align="right"></StyledTableCell>
-                                  </StyledTableRow>
-                                ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                              </StyledTableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
 
-                        <Grid item xs={12}>
-                          <Button>
-                            <Link href="/profileedit" passHref>
-                              Edit Application
-                            </Link>
-                          </Button>
-                        </Grid>
+                      <Grid item xs={12}>
+                        <Button>
+                          <Link href="/profileedit" passHref>
+                            Edit Application
+                          </Link>
+                        </Button>
+                      </Grid>
 
-                        <Grid container justifyContent="flex-end"></Grid>
-                      </Box>
+                      <Grid container justifyContent="flex-end"></Grid>
                     </Box>
+                  </Box>
 
-                    <Copyright sx={{ pt: 4 }} />
-                  </Container>
-                ))}
-          </Box>
+                  <Copyright sx={{ pt: 4 }} />
+                </Container>
+              ))}
         </Box>
-      </ThemeProvider>
+      </Box>
+    </ThemeProvider>
     </ColorModeContext.Provider>
   );
 }
@@ -422,5 +425,4 @@ function DashboardContent() {
 export default function Dashboard() {
   return <DashboardContent />;
 }
-
 
