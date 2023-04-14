@@ -103,8 +103,8 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const mdTheme = createTheme();
-function createData(companyname, jobtitle, status, empemail, stuEmail) {
-  return { companyname, jobtitle, status, empemail, stuEmail };
+function createData(companyname, jobtitle, status, empemail, interviewstatus) {
+  return { companyname, jobtitle, status, empemail,interviewstatus };
 }
 
 function DashboardContent() {
@@ -215,7 +215,8 @@ function DashboardContent() {
     Status: '',
     EmployerEmail: ''
   });
-  
+  const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail, app.Accepted ? 'Selected for Interview' : 'Pending')) || [];
+
   const [error, setError] = useState('');
 
   async function sendInfo() {
@@ -350,59 +351,65 @@ function DashboardContent() {
                         My Applications
                       </Typography>
 
-                      <Box
-                        component="form"
-                        noValidate
-                        onSubmit={handleSubmit}
-                        sx={{ mt: 1 }}
-                      >
-                        <TableContainer component={Paper}>
-                          <Table
-                            sx={{ minWidth: 850 }}
-                            aria-label="customized table"
-                          >
-                            <TableHead>
-                              <TableRow>
-                                <StyledTableCell>Company Name</StyledTableCell>
-                                <StyledTableCell align="left">
-                                  Job Position
+                    <Box
+                      component="form"
+                      noValidate
+                      onSubmit={handleSubmit}
+                      sx={{ mt: 1 }}
+                    >
+                      <TableContainer component={Paper}>
+                        <Table
+                          sx={{ minWidth: 850 }}
+                          aria-label="customized table"
+                        >
+                          <TableHead>
+                            <TableRow>
+                              <StyledTableCell>Company Name</StyledTableCell>
+                              <StyledTableCell align="left">
+                                Job Position
+                              </StyledTableCell>
+                              <StyledTableCell align="left">
+                                Status
+                              </StyledTableCell>
+                              <StyledTableCell align="left">
+                                Employer Email
+                              </StyledTableCell>
+                              <StyledTableCell align="left">
+                                Selection Status
+                              </StyledTableCell>
+
+                              <StyledTableCell align="right"></StyledTableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {rows
+                            .map((row) => (
+                              <StyledTableRow key={row.companyname}>
+                                <StyledTableCell component="th" scope="row">
+                                  {row.companyname}
                                 </StyledTableCell>
                                 <StyledTableCell align="left">
-                                  Status
+                                  {row.jobtitle}
                                 </StyledTableCell>
                                 <StyledTableCell align="left">
-                                  Employer Email
+                                  {row.status}
                                 </StyledTableCell>
-                                <StyledTableCell align="right"></StyledTableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {rows && rows
-                                .filter((row) => row.stuEmail === user.Email)
-                                .map((row) => (
-                                  <StyledTableRow key={row.companyname}>
-                                    <StyledTableCell component="th" scope="row">
-                                      {row.companyname}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="left">
-                                      {row.jobtitle}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="left">
-                                      {row.status}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="left">
-                                      {row.empemail}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="right">
-                                      <Button onClick={() => handleDelete(row)}>
-                                        <DeleteIcon />
-                                      </Button>
-                                    </StyledTableCell>
-                                  </StyledTableRow>
-                                ))}
-                            </TableBody>
-                          </Table>
-                        </TableContainer>
+                                <StyledTableCell align="left">
+                                  {row.empemail}
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  {row.interviewstatus}
+                                </StyledTableCell>                
+                                <StyledTableCell align="right">
+                                  <Button       onClick={() => handleDelete(row)}>
+                                  <DeleteIcon />
+                                  </Button>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
 
                         <Grid item xs={12}>
                           <Button>

@@ -222,7 +222,7 @@ function DashboardContent() {
     Decision:''
   });
 
-  const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle,app.FirstName, app.LastName,app.StudentEmail, app.Status ? 'Viewed' : 'Not Viewed')) || [];
+  const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle,app.FirstName, app.LastName,app.StudentEmail, app.Accepted ? 'Accepted' : 'Not Accepted')) || [];
 
   async function sendInfo(){
 
@@ -256,25 +256,25 @@ function DashboardContent() {
 
     async function sendInfoDecision(){
 
-      const body = { CompanyName: formData.CompanyName, 
-        JobPosition: formData.JobPosition,
-        StudentEmail: formData.StudentEmail,
-        Decision: formData.Decision,};
 
-      const response = await fetch("/api/EmployerDecide", {
+      const response = await fetch('/api/EmployerDecide', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body),
-        
+        body: JSON.stringify({ 
+          CompanyName: formData.CompanyName, 
+          JobPosition: formData.JobPosition,
+          StudentEmail: formData.StudentEmail,
+          Decision: formData.Decision,
+        })
       });
       const json = await response.json();
       if (json.error) {
         console.log(json.error);
       } else {
         console.log(json)
-       // window.location.href = '/applications2'
+       window.location.href = '/applications2'
       }
     }
 
@@ -283,6 +283,7 @@ function DashboardContent() {
       formData.JobPosition = row.jobtitle;
       formData.StudentEmail = row.email;
       formData.Decision = "accepted";
+      console.log();
       sendInfoDecision();  
     };
 
@@ -291,6 +292,7 @@ function DashboardContent() {
       formData.JobPosition = row.jobtitle;
       formData.StudentEmail = row.email;
       formData.Decision = "declined";
+
       sendInfoDecision();  
     };
 
@@ -457,14 +459,9 @@ function DashboardContent() {
                                 Accept
                                 </Button>
                                 </StyledTableCell>
-                                <StyledTableCell>
-                                <Button onClick={() => handleDeclined(row)} id ="decline" variant="contained" color="error">
-                                Decline
-                                </Button>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">
-                                  <Button onClick={() => handleDelete(row)}>
-                                  <DeleteIcon />
+                                <StyledTableCell align="left">
+                                  <Button onClick={() => handleDeclined(row)} id ="decline" variant="contained" color = "error">
+                                  Decline
                                   </Button>
                                 </StyledTableCell>
                               </StyledTableRow>
@@ -472,7 +469,6 @@ function DashboardContent() {
                           </TableBody>
                         </Table>
                       </TableContainer>
-
                       <Grid item xs={12}>
                         <Button>
                           <Link href="/profileedit" passHref>

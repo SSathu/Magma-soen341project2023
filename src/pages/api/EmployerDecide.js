@@ -3,20 +3,62 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 export default async function Handler(req, res){
+    
+  
 
-
-        console.log("Called")
-
-         const{compName, jobtitle, email, decision } = req.body;
+         const{CompanyName, JobPosition, StudentEmail, Decision } = req.body;
          try{
+            
+            if(Decision == 'accepted'){
+                const existingAccount = await prisma.applications.updateMany({
+                    where: {
+                        CompanyName:CompanyName,
+                        JobTitle:JobPosition,
+                        StudentEmail:StudentEmail,
+                    },
+                    data:{
+                        Viewed:true,
+                        Accepted:true},
+    
+                  });
+                  if(existingAccount){
+                    return res.status(200).json({message:"WORKED"});
+    
+                } else{
+                    return res.status(500).json({error:"NO WORK"});
+    
+                }
+            }
+            if(Decision == 'declined'){
+                const existingAccount = await prisma.applications.updateMany({
+                    where: {
+                        CompanyName:CompanyName,
+                        JobTitle:JobPosition,
+                        StudentEmail:StudentEmail,
+                    },
+                    data:{
+                        Viewed:true,
+                        Accepted:false},
+    
+                  });
+                  if(existingAccount){
+                    return res.status(200).json({message:"WORKED"});
+    
+                } else{
+                    return res.status(500).json({error:"NO WORK"});
+    
+                }
+            }
+            
 
-            return res.status(200).json(decision);
+          
+            
 
          }
-
+          
           catch (error) {
-           console.error(error);
+            return res.status(500).json({error});
          }
-
-
+        
+    
 }
