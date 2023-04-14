@@ -23,8 +23,8 @@ import { mainListItems, secondaryListItems } from "../main/list";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useUsers } from "../Components/userApi";
-import { handleFileUpload } from "./../../pages/api/upload.js";
-import fs from "fs";
+// import { handleFileUpload } from "./../../pages/api/upload.js";
+// import fs from "fs";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -102,10 +102,7 @@ function DashboardContent() {
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-
-        localStorage.setItem("mode",mode=== 'light' ? 'dark' : 'light' );
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
     []
@@ -211,65 +208,12 @@ function DashboardContent() {
     }
   };
 
-//   const downloadDocument = () => {
-//     const documentUrl = "/my-document.pdf";
-//     window.location.href = documentUrl;
-//   };
+  const downloadDocument = () => {
+    const documentUrl = "/my-document.pdf";
+    window.location.href = documentUrl;
+  };
 
-  // function handleUploadButtonClick() {
-  //   return <Upload />;
-  // }
-
-  // const [file, setFile] = useState(null);
-
-  // const handleFileChange = (event) => {
-  //   setFile(event.target.files[0]);
-  // };
-
-  // const handleFileUpload = async () => {
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-
-  //   const response = await fetch("/api/upload", {
-  //     method: "POST",
-  //     body: formData,
-  //   });
-
-  //   if (response.ok) {
-  //     console.log("File uploaded successfully.");
-  //   } else {
-  //     console.error("Failed to upload file.");
-  //   }
-  // };
-//   const [file, setFile] = useState(null);
-
-//   const handleFileChange = (event) => {
-//     setFile(event.target.files[0]);
-//   };
-
-//   const handleFileUpload = () => {
-//     const formData = new FormData();
-//     formData.append("file", file);
-
-//     fetch("/api/upload", {
-//       method: "POST",
-//       body: formData,
-//     })
-//       .then((response) => {
-//         console.log("File uploaded successfully.");
-//       })
-//       .catch((error) => {
-//         console.error("Error uploading file:", error);
-//       });
-//   };
-//   React.useEffect(()=>{
-//     if( localStorage.getItem("mode")){
-//      setMode(localStorage.getItem("mode"))
-//       }
-//  },[]);
-
-
-
+  
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -492,48 +436,23 @@ function DashboardContent() {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <input type="file" onChange={handleFileChange} />
-                      <button onClick={handleFileUpload}>Upload File</button>
+                      <input type="file"  />
+                      <button>Upload File</button>
                     </Grid>
                   </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      id="bio"
-                      name="bio"
-                      label="Biography"
-                      fullWidth
-                      autoComplete="bio"
-                      variant="standard"
-                      multiline
-                      minRows={1}
-                      maxRows={10}
-                      inputProps={{
-                        style: {
-                          minHeight: "60px",
-                        },
-                      }}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      onChange={(event) => setBio(event.target.value)}
-                    />
-                  </Grid>
-                </Grid>
-                <Button variant="contained" component="label" sx={{ mt: 3, mb: 2 }}>
-                      Upload a Resume
-                      <input hidden accept="image/*" multiple type="file" />
-                    </Button>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                 
-                  Save Changes
-                </Button>
-                <Grid container justifyContent="flex-end"></Grid>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    {/* <Link href="/profile" passHref>
+                    Save Changes
+                  </Link> */}
+                    Save Changes
+                  </Button>
+                  <Grid container justifyContent="flex-end"></Grid>
+                </Box>
               </Box>
 
               <Copyright sx={{ pt: 4 }} />
