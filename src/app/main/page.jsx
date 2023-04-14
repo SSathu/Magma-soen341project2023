@@ -150,6 +150,7 @@ function DashboardContent() {
     setOpen(false);
   };
 
+  
 
   const [mode, setMode] = React.useState('light');
 
@@ -238,6 +239,7 @@ function DashboardContent() {
       jobid: jobPosting.id,
       Viewed: false,
       Accepted: false,
+      job: jobPosting.jobTitle,
     };
     try {
       const response = await fetch("/api/Apply", {
@@ -309,6 +311,7 @@ function DashboardContent() {
                 </div>
               </div>
 
+            
 
             
 
@@ -404,6 +407,7 @@ function DashboardContent() {
                             </Typography>
                           </CardContent>
                           <CardActions>
+                            
                             <Button size="small" onClick={handleClickOpen}>
                               View
                             </Button>
