@@ -5,16 +5,20 @@ const prisma = new PrismaClient()
 export default async function handler(req, res) {
     
   console.log("called handler")  
-  const {email, jobid, Viewed, Accepted, job } = req.body
+  const {studentEmail, jobid, Viewed, Accepted, EmployerEmail, firstname, lastname, jobtitle, companyName} = req.body
 
   try {
     const Applications = await prisma.Applications.create({
       data: {
-        Email : email,
+        EmployerEmail : EmployerEmail,
+        StudentEmail : studentEmail,
+        FirstName : firstname,
+        LastName : lastname,
         JobId : jobid,
         Viewed: Viewed,
         Accepted : Accepted,
-        JobTitle : job,
+        JobTitle : jobtitle,
+        CompanyName : companyName,
       }
     })
 

@@ -228,10 +228,16 @@ function DashboardContent() {
     const loggedInJobPostingEmail = loggedInJobPosting.Email;
 
     const requestBody = {
-      email: loggedInJobPostingEmail,
+      studentEmail: loggedInJobPostingEmail,
       jobid: jobPosting.id,
       Viewed: false,
       Accepted: false,
+      EmployerEmail: jobPosting.Email,
+      firstname : loggedInJobPosting.FirstName,
+      lastname : loggedInJobPosting.LastName,
+      jobtitle : jobPosting.jobTitle,
+      companyName: jobPosting.CompanyName,
+
     };
     try {
       const response = await fetch("/api/Apply", {
@@ -371,7 +377,7 @@ function DashboardContent() {
               </select>
             </Container>
 
-            {filteredData.length != 0 && (
+            {filteredData.length !== 0 ? (
               <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                 <Container sx={{ py: 5 }} maxWidth="md">
                   <Grid container spacing={4}>
@@ -453,7 +459,94 @@ function DashboardContent() {
                   </Grid>
                 </Container>
               </Container>
-            )}
+            ):
+            (
+              <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Container sx={{ py: 5 }} maxWidth="md">
+                  <Grid container spacing={4}>
+                    {postings &&
+                      postings.map((jobPosting) => (
+                        <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
+                          <CardContent sx={{ flexGrow: 4 }}>
+                            <JobCard
+                              sx={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                              posting={jobPosting}
+                              key={jobPosting.id}
+                            />
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="h2"
+                              style={{ color: "black" }}
+                            >
+                              {jobPosting.jobTitle}
+                            </Typography>
+                            <Typography style={{ color: "black" }}>
+                              {jobPosting.jobDescription}
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button size="small" onClick={handleClickOpen}>
+                              View
+                            </Button>
+                            <Button
+                              size="small"
+                              id={`apply-button-${jobPosting.id}`}
+                              onClick={() => applyToJob(jobPosting)}
+                            >
+                              Apply
+                            </Button>
+                          </CardActions>
+                          <BootstrapDialog
+                            onClose={handleClose}
+                            aria-labelledby="customized-dialog-title"
+                            open={open}
+                          >
+                            <BootstrapDialogTitle
+                              id="customized-dialog-title"
+                              onClose={handleClose}
+                            >
+                              Company name
+                            </BootstrapDialogTitle>
+                            <DialogContent dividers>
+                              <Typography variant="h6" gutterBottom>
+                                Job Description
+                              </Typography>
+                              <Typography gutterBottom>
+                                Cras mattis consectetur purus sit amet
+                                fermentum. Cras justo odio, dapibus ac facilisis
+                                in, egestas eget quam. Morbi leo risus, porta ac
+                                consectetur ac, vestibulum at eros.
+                              </Typography>
+
+                              <Typography variant="h6" gutterBottom>
+                                Job Location
+                              </Typography>
+                              <Typography gutterBottom>
+                               Montreal, Quebec
+                              </Typography>
+
+                              <Typography variant="h6" gutterBottom>
+                                Salary
+                              </Typography>
+                              <Typography gutterBottom>
+                              20$/hour
+                              </Typography>
+                            </DialogContent>
+                            <DialogActions></DialogActions>
+                          </BootstrapDialog>
+                        </Grid>
+                      ))}
+                  </Grid>
+                </Container>
+              </Container>
+            )
+
+          }
           </Box>
         </Box>
       </ThemeProvider>
