@@ -31,6 +31,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -146,19 +150,24 @@ function DashboardContent() {
     setOpen(false);
   };
 
-  const [mode, setMode] = React.useState("light");
+
+  const [mode, setMode] = React.useState('light');
+
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+        localStorage.setItem("mode",mode=== 'light' ? 'dark' : 'light' );
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
       },
     }),
     []
   );
 
+ 
   const theme = React.useMemo(
     () =>
       createTheme({
+
         palette: {
           primary: {
             light: "#757ce8",
@@ -210,6 +219,14 @@ function DashboardContent() {
   React.useEffect(() => {
     getPostings();
   }, []);
+
+  React.useEffect(()=>{
+    if( localStorage.getItem("mode")){
+     setMode(localStorage.getItem("mode"))
+      }
+ },[]);
+
+
 
   async function applyToJob(jobPosting) {
     const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
@@ -266,6 +283,8 @@ function DashboardContent() {
                   ...(open && { display: "none" }),
                 }}
               >
+
+
                 <MenuIcon />
               </IconButton>
               <Typography
@@ -273,11 +292,11 @@ function DashboardContent() {
                 variant="h6"
                 color="inherit"
                 noWrap
-                sx={{ flexGrow: 1 }}
-              >
+                sx={{ flexGrow: 1 }}>
                 CareerHub
               </Typography>
               <div className="main">
+              
                 <div className="search">
                   <TextField
                     id="outlined-basic"
@@ -285,20 +304,16 @@ function DashboardContent() {
                     variant="outlined"
                     fullWidth
                     label="Search"
+                    color = "secondary"
                   />
                 </div>
               </div>
 
-              <IconButton
-                sx={{ ml: 1 }}
-                onClick={colorMode.toggleColorMode}
-                color="inherit"
-              >
-                {theme.palette.mode === "dark" ? (
-                  <Brightness7Icon />
-                ) : (
-                  <Brightness4Icon />
-                )}
+
+            
+
+              <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -335,6 +350,29 @@ function DashboardContent() {
             }}
           >
             <Toolbar />
+
+          
+              <Container maxWidth="lg" sx={{ mt: 2, mb: 2, ml: 2}}>
+              <label htmlFor="filters"><b>Filters:</b></label>
+                 <select name="filters" id="filters"  sx={{ mt: 30, mb: 20 }}>
+                  <option value="inperson">All Offers</option>
+                     <option value="remote">Most Relevant</option>
+                     <option value="hybrid">Recommended</option>
+                     <option value="hybrid">Most Recent</option>
+               </select>
+              </Container>
+
+              <Container maxWidth="lg" sx={{ mt: 2, mb: 2, ml: 2}}>
+              <label htmlFor="location"><b>Location:</b></label>
+                 <select name="location" id="location"  sx={{ mt: 30, mb: 20 }}>
+                  <option value="inperson">In Person</option>
+                     <option value="remote">Remote</option>
+                     <option value="hybrid">Hybrid</option>
+               </select>
+              </Container>
+
+              
+        
 
             {filteredData.length != 0 && (
               <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
