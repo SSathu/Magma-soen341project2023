@@ -27,6 +27,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from 'react';
+
+
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -177,14 +181,7 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [salary, setSalary] = React.useState("");
-
-  const handleSalaryChange = (event) => {
-    const value = event.target.value;
-    if (/^[0-9]*$/.test(value)) {
-      setSalary(value);
-    }
-  };
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -212,8 +209,49 @@ function DashboardContent() {
     },
   }));
 
-
+  const [formData, setFormData] = useState({
+    CompanyName:'', 
+    JobPosition:'',
+    Status:'',
+    EmployerEmail:''
+  });
   const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail)) || [];
+
+  const [error, setError] = useState('');
+
+async function sendInfo(){
+
+  const response = await fetch('/api/DeleteApplication', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 
+      CompanyName: formData.CompanyName, 
+      JobPosition: formData.JobPosition,
+      Status: formData.Status,
+      EmployerEmail: formData.EmployerEmail
+    })
+  });
+  const json = await response.json();
+  if (json.error) {
+    console.log(json.error);
+  } else {
+    window.location.href = '/applications'
+  }
+}
+ 
+  const handleDelete = (row) => {
+    formData.CompanyName = row.companyname;
+    formData.JobPosition = row.jobtitle;
+    formData.Status = row.status;
+    formData.EmployerEmail = row.empemail;
+
+    sendInfo();
+
+  
+
+  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -350,8 +388,12 @@ function DashboardContent() {
                                 </StyledTableCell>
                                 <StyledTableCell align="left">
                                   {row.empemail}
+                                </StyledTableCell>               
+                                <StyledTableCell align="right">
+                                  <Button       onClick={() => handleDelete(row)}>
+                                  <DeleteIcon />
+                                  </Button>
                                 </StyledTableCell>
-                                <StyledTableCell align="right"></StyledTableCell>
                               </StyledTableRow>
                             ))}
                           </TableBody>
