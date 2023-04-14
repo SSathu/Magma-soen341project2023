@@ -464,6 +464,11 @@ function DashboardContent() {
                                   Decline
                                   </Button>
                                 </StyledTableCell>
+                                <StyledTableCell align="right">
+                                  {/* <Button onClick={() => handleDelete(row)}>
+                                  <DeleteIcon />
+                                  </Button> */}
+                                </StyledTableCell>
                               </StyledTableRow>
                             ))}
                           </TableBody>
