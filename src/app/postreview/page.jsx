@@ -132,10 +132,9 @@ function DashboardContent() {
 
   const [formData, setFormData] = useState({
     companyname: "",
-    jobtitle: "",
-    jobdescription: "",
-    salary: "",
-    location: "",
+    companyreview: "",
+    rating: 0.0,
+  
   });
 
   const [error, setError] = useState("");
@@ -146,26 +145,20 @@ function DashboardContent() {
   };
   const [salary, setSalary] = React.useState("");
 
-  const handleSalaryChange = (event) => {
-    const value = event.target.value;
-    if (/^[0-9]*$/.test(value)) {
-      setSalary(value);
-    }
-  };
+
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const response = await fetch("/api/AppPostings", {
+    console.log(formData.rating);
+    const response = await fetch("/api/AppRatings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        companyname: formData.companyname,
-        jobtitle: formData.jobtitle,
-        jobdescription: formData.jobdescription,
-        salary: salary,
-        location: formData.location,
+        CompanyName: formData.companyname,
+        CompanyReview: formData.companyreview,
+        Rating: formData.rating,
       }),
     });
     const json = await response.json();
@@ -182,10 +175,18 @@ function DashboardContent() {
     const value = target.value;
     const id = target.id;
 
+    
+
     setFormData({
       ...formData,
       [id]: value,
     });
+
+    if(id != 'companyname' || id != 'companyreview'){
+      formData.rating = value;
+    }
+
+    //console.log(formData.rating);
   }
   const [value, setValue] = React.useState(2);
 
@@ -195,6 +196,18 @@ function DashboardContent() {
       }
  },[]);
 
+  const [options, setOptions] = useState([]);
+
+  // Use the useEffect hook to fetch the select box values from the backend API
+  React.useEffect(() => {
+    async function fetchSelectBoxValues() {
+      const response = await fetch('/api/GetCompanies');
+      const values = await response.json();
+      setOptions(values);
+    }
+    fetchSelectBoxValues();
+  }, []);
+ 
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -310,15 +323,17 @@ function DashboardContent() {
                           <b>Company:</b>
                         </label>
                         <select
-                          name="company"
-                          id="company"
+                          name="companyname"
+                          id="companyname"
                           required
                           onChange={handleInputChange}
                           style={{ flex: 1 }}
                         >
-                          <option value="inperson">Company 1</option>
-                          <option value="remote">Company 2</option>
-                          <option value="hybrid">Company 3</option>
+                         {options.map((option) => (
+    <option key={option.CompanyName} value={option.CompanyName}>
+      {option.CompanyName}
+    </option>
+  ))}
                         </select>
                       </div>
                     </Grid>
@@ -346,9 +361,16 @@ function DashboardContent() {
                     </Grid>
                     <Grid item xs={12} color="custom">
                       <Rating
-                        name="half-rating"
+                        id = "rating"
+                        name="rating"
+                        onChange={(event, newValue) => {
+                          setFormData({
+                            ...formData,
+                            rating: newValue,
+                          });
+                        }}
                         defaultValue={2.5}
-                        precision={0.5}
+                        precision={1.0}
                       />
                     </Grid>
                   </Grid>

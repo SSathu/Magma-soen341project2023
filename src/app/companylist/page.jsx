@@ -407,7 +407,7 @@ function DashboardContent() {
                                   >
                                     <Rating
                                       name="read-only"
-                                      value={4.5}
+                                      value={2.0}
                                       readOnly
                                     />
                                   </div>
