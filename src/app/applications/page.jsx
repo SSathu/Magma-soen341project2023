@@ -218,7 +218,6 @@ function DashboardContent() {
     Status: '',
     EmployerEmail: ''
   });
-  const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail, app.Accepted ? 'Selected for Interview' : 'Pending')) || [];
 
   const [error, setError] = useState('');
 
