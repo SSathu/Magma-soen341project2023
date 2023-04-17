@@ -25,6 +25,10 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Rating from "@mui/material/Rating";
 import Avatar from "@mui/material/Avatar";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from '@mui/material/Badge';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -204,6 +208,16 @@ function DashboardContent() {
      setMode(localStorage.getItem("mode"))
       }
  },[]);
+ 
+
+ const [anchorEl, setAnchorEl] = React.useState(null);
+  const openNotif = Boolean(anchorEl);
+  const handleClickNotif = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseNotif = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -248,6 +262,24 @@ function DashboardContent() {
                   <Brightness4Icon />
                 )}
               </IconButton>
+              <IconButton id="basic-button"
+        aria-controls={openNotif ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={openNotif ? 'true' : undefined}
+        onClick={handleClickNotif}><Badge badgeContent={3} color="error"> <NotificationsIcon onClick> </NotificationsIcon></Badge></IconButton>
+        <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={openNotif}
+        onClose={handleCloseNotif}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleCloseNotif}>Notification 1</MenuItem>
+        <MenuItem onClick={handleCloseNotif}>Notification 2</MenuItem>
+        <MenuItem onClick={handleCloseNotif}>Notification 3</MenuItem>
+      </Menu>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
