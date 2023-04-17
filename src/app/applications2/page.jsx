@@ -29,6 +29,10 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from '@mui/material/Badge';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
@@ -324,7 +328,14 @@ function DashboardContent() {
 
   };
 
-
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const openNotif = Boolean(anchorEl);
+    const handleClickNotif = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleCloseNotif = () => {
+      setAnchorEl(null);
+    };
 
 
   return (
@@ -375,19 +386,51 @@ function DashboardContent() {
                 px: [1],
               }}
             >
-              <IconButton onClick={toggleDrawer}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Toolbar>
-            <Divider />
-            <List component="nav">
-              {mainListItems}
-              <Divider sx={{ my: 1 }} />
-              {secondaryListItems}
-            </List>
-          </Drawer>
-          <Box
-            component="main"
+
+//              <IconButton onClick={toggleDrawer}>
+  //              <ChevronLeftIcon />
+    //          </IconButton>
+      //      </Toolbar>
+       //     <Divider />
+        //    <List component="nav">
+        //      {mainListItems}
+        //      <Divider sx={{ my: 1 }} />
+          //    {secondaryListItems}
+         //   </List>
+         // </Drawer>
+        //  <Box
+         //   component="main"
+
+              CareerHub
+            </Typography>
+            
+            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+      </IconButton>
+      <IconButton id="basic-button"
+        aria-controls={openNotif ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={openNotif ? 'true' : undefined}
+        onClick={handleClickNotif}><Badge badgeContent={3} color="error"> <NotificationsIcon onClick> </NotificationsIcon></Badge></IconButton>
+        <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={openNotif}
+        onClose={handleCloseNotif}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleCloseNotif}>Notification 1</MenuItem>
+        <MenuItem onClick={handleCloseNotif}>Notification 2</MenuItem>
+        <MenuItem onClick={handleCloseNotif}>Notification 3</MenuItem>
+      </Menu>
+
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <Toolbar
+
             sx={{
               backgroundColor: (theme) =>
                 theme.palette.mode === "light"
