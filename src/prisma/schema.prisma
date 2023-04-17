@@ -59,3 +59,14 @@ model File {
   data      Bytes
   createdAt DateTime @default(now())
 }
+
+model Ratings{
+  id        Int      @id @default(autoincrement())
+  Email     String 
+  FirstName String
+  LastName  String
+  CompanyName String
+  CompanyReview String @default("")
+  Rating  Float @default(0)
+
+}
