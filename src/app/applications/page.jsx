@@ -253,7 +253,7 @@ function DashboardContent() {
 
   };
   
-  const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail, app.StudentEmail)) || [];
+  // const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail, app.StudentEmail)) || [];
 
 
 

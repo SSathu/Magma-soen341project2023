@@ -410,7 +410,7 @@ function DashboardContent() {
                         </CardContent>
                         <CardActions>
                           <Button
-                            id={`apply-button-${jobPosting.id}`}
+                            id={`view-button-${jobPosting.id}`}
                             size="small" onClick={() => handleClickOpen(jobPosting.id)}>
                                View
                           </Button>
@@ -492,7 +492,7 @@ function DashboardContent() {
                             </CardContent>
                             <CardActions>
                               <Button
-                                id={`apply-button-${jobPosting.id}`}
+                                id={`view-button-${jobPosting.id}`}
                                 size="small" onClick={() => handleClickOpen(jobPosting.id)}>
                                    View
                               </Button>
