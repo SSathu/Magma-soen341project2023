@@ -35,12 +35,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Badge from '@mui/material/Badge';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-
-const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
-
+import Badge from "@mui/material/Badge";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import DeleteIcon from '@mui/icons-material/Delete';
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function Copyright(props) {
   return (
@@ -148,15 +147,12 @@ function DashboardContent() {
   const users = useUsers();
   const [open1, setOpen1] = React.useState(false);
   const [openJobPostingId, setOpenJobPostingId] = React.useState(null);
-  
 
-
-  
   const handleClickOpen = (jobPostingId) => {
     setOpen1(true);
     setOpenJobPostingId(jobPostingId);
   };
-  
+
   const handleClose = () => {
     setOpen1(false);
     setOpenJobPostingId(null);
@@ -213,7 +209,6 @@ function DashboardContent() {
     setOpen(!open);
   };
 
-
   async function getPostings() {
     let result = await fetch("/api/Postings");
     let body = await result.json();
@@ -251,7 +246,6 @@ function DashboardContent() {
       lastname: loggedInJobPosting.LastName,
       jobtitle: jobPosting.jobTitle,
       companyName: jobPosting.CompanyName,
-
     };
     try {
       const response = await fetch("/api/Apply", {
@@ -331,39 +325,40 @@ function DashboardContent() {
               </div>
 
               <IconButton
-                sx={{ ml: 1 }}
-                onClick={colorMode.toggleColorMode}
-                color="inherit"
+                id="basic-button"
+                aria-controls="basic-menu"
+                aria-haspopup="true"
+                onClick={handleClickNotif}
               >
-
-                {theme.palette.mode === "dark" ? (
-                  <Brightness7Icon />
-                ) : (
-                  <Brightness4Icon />
-                )}
+                <Badge badgeContent={3} color="error">
+                  <NotificationsIcon />
+                </Badge>
               </IconButton>
-
-                  <IconButton id="basic-button"
-        aria-controls={openNotif ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={openNotif ? 'true' : undefined}
-        onClick={handleClickNotif}><Badge badgeContent={3} color="error"> <NotificationsIcon onClick> </NotificationsIcon></Badge></IconButton>
-        <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={openNotif}
-        onClose={handleCloseNotif}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <MenuItem onClick={handleCloseNotif}>Notification 1</MenuItem>
-        <MenuItem onClick={handleCloseNotif}>Notification 2</MenuItem>
-        <MenuItem onClick={handleCloseNotif}>Notification 3</MenuItem>
-      </Menu>
-             
-
-
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={openNotif}
+                onClose={handleCloseNotif}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={handleCloseNotif}>
+                  Notification 1
+                  <IconButton aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNotif}>Notification 2
+                <IconButton aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNotif}>Notification 3
+                <IconButton aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton></MenuItem>
+              </Menu>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
@@ -430,164 +425,172 @@ function DashboardContent() {
                     {filteredData &&
                       filteredData.map((jobPosting) => (
                         <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-                        <CardContent sx={{ flexGrow: 4 }}>
-                          <JobCard
-                            sx={{
-                              height: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                            posting={jobPosting}
-                            key={jobPosting.id}
-                          />
-                          <Typography
-                            gutterBottom
-                            variant="h5"
-                            component="h2"
-                            style={{ color: "black" }}
-                          >
-                            {jobPosting.jobTitle}
-                          </Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button
-                            id={`apply-button-${jobPosting.id}`}
-                            size="small" onClick={() => handleClickOpen(jobPosting.id)}>
-                               View
-                          </Button>
-                          <div>
-                            <BootstrapDialog
-                              onClose={handleClose}
-                              aria-labelledby="customized-dialog-title"
-                              open={open1 && openJobPostingId === jobPosting.id} // only open the dialog if openJobPostingId matches the current jobPosting ID
+                          <CardContent sx={{ flexGrow: 4 }}>
+                            <JobCard
+                              sx={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                              posting={jobPosting}
+                              key={jobPosting.id}
+                            />
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="h2"
+                              style={{ color: "black" }}
                             >
-                              <BootstrapDialogTitle
-                                id="customized-dialog-title"
+                              {jobPosting.jobTitle}
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button
+                              id={`apply-button-${jobPosting.id}`}
+                              size="small"
+                              onClick={() => handleClickOpen(jobPosting.id)}
+                            >
+                              View
+                            </Button>
+                            <div>
+                              <BootstrapDialog
                                 onClose={handleClose}
+                                aria-labelledby="customized-dialog-title"
+                                open={
+                                  open1 && openJobPostingId === jobPosting.id
+                                } // only open the dialog if openJobPostingId matches the current jobPosting ID
                               >
-                                {jobPosting.companyName}
-                              </BootstrapDialogTitle>
-                              <DialogContent dividers>
-                                <Typography variant="h6" gutterBottom>
-                                  Job Description:
-                                </Typography>
-                                <Typography gutterBottom>
-                                  {jobPosting.jobDescription}
-                                </Typography>
-
-                                <Typography variant="h6" gutterBottom>
-                                  Location:
-                                </Typography>
-                                <Typography gutterBottom>
-                                  {jobPosting.Location}
-                                </Typography>
-
-                                <Typography variant="h6" gutterBottom>
-                                  Salary:
-                                </Typography>
-                                <Typography gutterBottom>{jobPosting.Salary}$/Hour</Typography>
-                              </DialogContent>
-                            </BootstrapDialog>
-                          </div>
-
-                          <Button
-                            size="small"
-                            id={`apply-button-${jobPosting.id}`}
-                            onClick={() => applyToJob(jobPosting)}
-                          >
-                            Apply
-                          </Button>
-                        </CardActions>
-                      </Grid>
-                    ))}
-                </Grid>
-              </Container>
-            </Container>
-            ) :
-              (
-
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                  <Container sx={{ py: 5 }} maxWidth="md">
-                    <Grid container spacing={4}>
-                      {postings &&
-                        postings.map((jobPosting) => (
-                          <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-                            <CardContent sx={{ flexGrow: 4 }}>
-                              <JobCard
-                                sx={{
-                                  height: "100%",
-                                  display: "flex",
-                                  flexDirection: "column",
-                                }}
-                                posting={jobPosting}
-                                key={jobPosting.id}
-                              />
-                              <Typography
-                                gutterBottom
-                                variant="h5"
-                                component="h2"
-                                style={{ color: "black" }}
-                              >
-                                {jobPosting.jobTitle}
-                              </Typography>
-                            </CardContent>
-                            <CardActions>
-                              <Button
-                                id={`apply-button-${jobPosting.id}`}
-                                size="small" onClick={() => handleClickOpen(jobPosting.id)}>
-                                   View
-                              </Button>
-                              <div>
-                                <BootstrapDialog
+                                <BootstrapDialogTitle
+                                  id="customized-dialog-title"
                                   onClose={handleClose}
-                                  aria-labelledby="customized-dialog-title"
-                                  open={open1 && openJobPostingId === jobPosting.id} // only open the dialog if openJobPostingId matches the current jobPosting ID
                                 >
-                                  <BootstrapDialogTitle
-                                    id="customized-dialog-title"
-                                    onClose={handleClose}
-                                  >
-                                    {jobPosting.companyName}
-                                  </BootstrapDialogTitle>
-                                  <DialogContent dividers>
-                                    <Typography variant="h6" gutterBottom>
-                                      Job Description:
-                                    </Typography>
-                                    <Typography gutterBottom>
-                                      {jobPosting.jobDescription}
-                                    </Typography>
+                                  {jobPosting.companyName}
+                                </BootstrapDialogTitle>
+                                <DialogContent dividers>
+                                  <Typography variant="h6" gutterBottom>
+                                    Job Description:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.jobDescription}
+                                  </Typography>
 
-                                    <Typography variant="h6" gutterBottom>
-                                      Location:
-                                    </Typography>
-                                    <Typography gutterBottom>
-                                      {jobPosting.Location}
-                                    </Typography>
+                                  <Typography variant="h6" gutterBottom>
+                                    Location:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.Location}
+                                  </Typography>
 
-                                    <Typography variant="h6" gutterBottom>
-                                      Salary:
-                                    </Typography>
-                                    <Typography gutterBottom>{jobPosting.Salary}$/Hour</Typography>
-                                  </DialogContent>
-                                </BootstrapDialog>
-                              </div>
+                                  <Typography variant="h6" gutterBottom>
+                                    Salary:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.Salary}$/Hour
+                                  </Typography>
+                                </DialogContent>
+                              </BootstrapDialog>
+                            </div>
 
-                              <Button
-                                size="small"
-                                id={`apply-button-${jobPosting.id}`}
-                                onClick={() => applyToJob(jobPosting)}
-                              >
-                                Apply
-                              </Button>
-                            </CardActions>
-                          </Grid>
-                        ))}
-                    </Grid>
-                  </Container>
+                            <Button
+                              size="small"
+                              id={`apply-button-${jobPosting.id}`}
+                              onClick={() => applyToJob(jobPosting)}
+                            >
+                              Apply
+                            </Button>
+                          </CardActions>
+                        </Grid>
+                      ))}
+                  </Grid>
                 </Container>
-              )
+              </Container>
+            ) : (
+              <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Container sx={{ py: 5 }} maxWidth="md">
+                  <Grid container spacing={4}>
+                    {postings &&
+                      postings.map((jobPosting) => (
+                        <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
+                          <CardContent sx={{ flexGrow: 4 }}>
+                            <JobCard
+                              sx={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                              posting={jobPosting}
+                              key={jobPosting.id}
+                            />
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="h2"
+                              style={{ color: "black" }}
+                            >
+                              {jobPosting.jobTitle}
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button
+                              id={`apply-button-${jobPosting.id}`}
+                              size="small"
+                              onClick={() => handleClickOpen(jobPosting.id)}
+                            >
+                              View
+                            </Button>
+                            <div>
+                              <BootstrapDialog
+                                onClose={handleClose}
+                                aria-labelledby="customized-dialog-title"
+                                open={
+                                  open1 && openJobPostingId === jobPosting.id
+                                } // only open the dialog if openJobPostingId matches the current jobPosting ID
+                              >
+                                <BootstrapDialogTitle
+                                  id="customized-dialog-title"
+                                  onClose={handleClose}
+                                >
+                                  {jobPosting.companyName}
+                                </BootstrapDialogTitle>
+                                <DialogContent dividers>
+                                  <Typography variant="h6" gutterBottom>
+                                    Job Description:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.jobDescription}
+                                  </Typography>
 
-            }
+                                  <Typography variant="h6" gutterBottom>
+                                    Location:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.Location}
+                                  </Typography>
+
+                                  <Typography variant="h6" gutterBottom>
+                                    Salary:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.Salary}$/Hour
+                                  </Typography>
+                                </DialogContent>
+                              </BootstrapDialog>
+                            </div>
+
+                            <Button
+                              size="small"
+                              id={`apply-button-${jobPosting.id}`}
+                              onClick={() => applyToJob(jobPosting)}
+                            >
+                              Apply
+                            </Button>
+                          </CardActions>
+                        </Grid>
+                      ))}
+                  </Grid>
+                </Container>
+              </Container>
+            )}
           </Box>
         </Box>
       </ThemeProvider>
