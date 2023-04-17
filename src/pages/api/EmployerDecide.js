@@ -18,7 +18,9 @@ export default async function Handler(req, res){
                     },
                     data:{
                         Viewed:true,
-                        Accepted:true},
+                        Accepted:true,
+                        GaveDecision: true
+                    },
     
                   });
                   if(existingAccount){
@@ -38,7 +40,9 @@ export default async function Handler(req, res){
                     },
                     data:{
                         Viewed:true,
-                        Accepted:false},
+                        Accepted:false,
+                        GaveDecision: true,
+                    },
     
                   });
                   if(existingAccount){

@@ -425,30 +425,63 @@ function DashboardContent() {
                     {filteredData &&
                       filteredData.map((jobPosting) => (
                         <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-                          <CardContent sx={{ flexGrow: 4 }}>
-                            <JobCard
-                              sx={{
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                              }}
-                              posting={jobPosting}
-                              key={jobPosting.id}
-                            />
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="h2"
-                              style={{ color: "black" }}
-                            >
-                              {jobPosting.jobTitle}
-                            </Typography>
-                          </CardContent>
-                          <CardActions>
-                            <Button
-                              id={`apply-button-${jobPosting.id}`}
-                              size="small"
-                              onClick={() => handleClickOpen(jobPosting.id)}
+
+                        <CardContent sx={{ flexGrow: 4 }}>
+                          <JobCard
+                            sx={{
+                              height: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                            posting={jobPosting}
+                            key={jobPosting.id}
+                          />
+                          <Typography
+                            gutterBottom
+                            variant="h5"
+                            component="h2"
+                            style={{ color: "black" }}
+                          >
+                            {jobPosting.jobTitle}
+                          </Typography>
+                        </CardContent>
+                        <CardActions>
+                          <Button
+                            id={`view-button-${jobPosting.id}`}
+                            size="small" onClick={() => handleClickOpen(jobPosting.id)}>
+                               View
+                          </Button>
+                          <div>
+                            <BootstrapDialog
+                              onClose={handleClose}
+                              aria-labelledby="customized-dialog-title"
+                              open={open1 && openJobPostingId === jobPosting.id} // only open the dialog if openJobPostingId matches the current jobPosting ID
+
+                   //       <CardContent sx={{ flexGrow: 4 }}>
+                   //         <JobCard
+                   //           sx={{
+                   //             height: "100%",
+                     //           display: "flex",
+                      //          flexDirection: "column",
+                       //       }}
+                        //      posting={jobPosting}
+                         //     key={jobPosting.id}
+                         //   />
+                          //  <Typography
+                           //   gutterBottom
+                            //  variant="h5"
+                            //  component="h2"
+                           //   style={{ color: "black" }}
+                          //  >
+                          //    {jobPosting.jobTitle}
+                          //  </Typography>
+                        //  </CardContent>
+                        //  <CardActions>
+                        //    <Button
+                        //      id={`apply-button-${jobPosting.id}`}
+                        //      size="small"
+                         //     onClick={() => handleClickOpen(jobPosting.id)}
+
                             >
                               View
                             </Button>
@@ -546,8 +579,22 @@ function DashboardContent() {
                                   open1 && openJobPostingId === jobPosting.id
                                 } // only open the dialog if openJobPostingId matches the current jobPosting ID
                               >
+
+                       //         {jobPosting.jobTitle}
+                        //      </Typography>
+                        //    </CardContent>
+                        //    <CardActions>
+                        //      <Button
+                        //        id={`view-button-${jobPosting.id}`}
+                        //        size="small" onClick={() => handleClickOpen(jobPosting.id)}>
+                        //           View
+                        //      </Button>
+                        //      <div>
+                        //        <BootstrapDialog
+
                                 <BootstrapDialogTitle
                                   id="customized-dialog-title"
+
                                   onClose={handleClose}
                                 >
                                   {jobPosting.companyName}
