@@ -46,7 +46,7 @@ export const mainListItems = (
       <ListItemText primary="Post A Review"/>
 
     </ListItemButton>
-    <ListItemButton href="/companylist">
+    <ListItemButton href="/companies">
       <ListItemIcon>
         <WorkIcon size={25} />
       </ListItemIcon>
