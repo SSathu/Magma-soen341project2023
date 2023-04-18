@@ -78,4 +78,5 @@ model Notifications{
   studentEmail String
   Notified Boolean
   Decision String @default("")
+  Position String @default("")
 }

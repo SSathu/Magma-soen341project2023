@@ -261,7 +261,7 @@ function DashboardContent() {
                   <Brightness4Icon />
                 )}
               </IconButton>
-             
+
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
