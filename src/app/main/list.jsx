@@ -39,11 +39,18 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Post a Job" />
     </ListItemButton>
+    <ListItemButton href="/postreview" >
+      <ListItemIcon>
+        <AiFillFolderOpen size={25} />
+      </ListItemIcon>
+      <ListItemText primary="Post A Review"/>
+
+    </ListItemButton>
     <ListItemButton href="/companylist">
       <ListItemIcon>
         <WorkIcon size={25} />
       </ListItemIcon>
-      <ListItemText primary="Company Review" />
+      <ListItemText primary="Companies" />
     </ListItemButton>
     
     <ListItemButton onClick={handleSubmit}>

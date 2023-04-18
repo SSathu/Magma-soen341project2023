@@ -25,6 +25,9 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Rating from "@mui/material/Rating";
 import Avatar from "@mui/material/Avatar";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -205,6 +208,8 @@ function DashboardContent() {
       }
  },[]);
 
+
+
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -248,6 +253,7 @@ function DashboardContent() {
                   <Brightness4Icon />
                 )}
               </IconButton>
+              
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>

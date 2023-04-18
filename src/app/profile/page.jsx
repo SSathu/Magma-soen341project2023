@@ -21,6 +21,10 @@ import { mainListItems, secondaryListItems } from '../main/list';
 import Avatar from '@mui/material/Avatar';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from '@mui/material/Badge';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -199,6 +203,7 @@ function DashboardContent() {
             <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
         {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
       </IconButton>
+      
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>

@@ -34,7 +34,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
-
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Badge from "@mui/material/Badge";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import DeleteIcon from '@mui/icons-material/Delete';
 const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 
 function Copyright(props) {
@@ -143,12 +147,12 @@ function DashboardContent() {
   const users = useUsers();
   const [open1, setOpen1] = React.useState(false);
   const [openJobPostingId, setOpenJobPostingId] = React.useState(null);
-  
+
   const handleClickOpen = (jobPostingId) => {
     setOpen1(true);
     setOpenJobPostingId(jobPostingId);
   };
-  
+
   const handleClose = () => {
     setOpen1(false);
     setOpenJobPostingId(null);
@@ -190,6 +194,7 @@ function DashboardContent() {
 
   const [open, setOpen] = React.useState(true);
   const [postings, setPostings] = React.useState(null);
+  const [notifications, setNotifications] = React.useState(null);
 
   const [filteredData, setfilteredData] = useState([]);
 
@@ -213,6 +218,13 @@ function DashboardContent() {
     // console.log(postings);
   }
 
+  async function getNotificaitons() {
+    let result = await fetch("/api/getNotifications");
+    let body = await result.json();
+    setNotifications(body);
+
+  }
+
   async function getFilteredJobs() {
     Filter = <input type="text" />;
   }
@@ -222,10 +234,18 @@ function DashboardContent() {
   }, []);
 
   React.useEffect(() => {
+    getNotificaitons();
+  }, []);
+
+  React.useEffect(() => {
     if (localStorage.getItem("mode")) {
       setMode(localStorage.getItem("mode"));
     }
   }, []);
+
+  // const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
+
+  // const loggedInJobPostingEmail = loggedInJobPosting.Email;
 
   async function applyToJob(jobPosting) {
     const loggedInJobPosting = users.find((user) => user.LoggedIn === true);
@@ -242,7 +262,6 @@ function DashboardContent() {
       lastname: loggedInJobPosting.LastName,
       jobtitle: jobPosting.jobTitle,
       companyName: jobPosting.CompanyName,
-
     };
     try {
       const response = await fetch("/api/Apply", {
@@ -264,6 +283,55 @@ function DashboardContent() {
       }
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openNotif = Boolean(anchorEl);
+  const handleClickNotif = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseNotif = () => {
+    setAnchorEl(null);
+  };
+
+
+  let filteredNotifications = [];
+
+  if (users && users.length > 0) {
+    // Find the first user where LoggedIn is true
+    const loggedInUser = users.find(user => user.LoggedIn === true);
+  
+    if (loggedInUser) {
+      if (notifications && notifications.length > 0) {
+        // Filter the notification array by the Email of the loggedInUser
+         filteredNotifications = notifications.filter(notification => notification.studentEmail === loggedInUser.Email);
+        console.log(filteredNotifications);
+      } else {
+        console.log("No notifications found");
+      }
+    } else {
+      console.log("No user is currently logged in");
+    }
+  } else {
+    console.log("No users found");
+  }
+  
+  async function removeNotification(notifId) {
+    const response = await fetch('/api/deleteNotification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        notificationID: notifId,
+      })
+    });
+    const json = await response.json();
+    if (json.error) {
+      console.log(json.error);
+    } else {
+      window.location.href = '/main'
     }
   }
 
@@ -317,12 +385,49 @@ function DashboardContent() {
                 onClick={colorMode.toggleColorMode}
                 color="inherit"
               >
+
                 {theme.palette.mode === "dark" ? (
                   <Brightness7Icon />
                 ) : (
                   <Brightness4Icon />
                 )}
               </IconButton>
+
+              <IconButton
+                id="basic-button"
+                aria-controls="basic-menu"
+                aria-haspopup="true"
+                onClick={handleClickNotif}
+              >
+                <Badge badgeContent={filteredNotifications.length} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={openNotif}
+                onClose={handleCloseNotif}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+
+
+                {filteredNotifications &&
+                  filteredNotifications
+                    .filter((notif) => notif.Notified === false)
+                    .map((notif) => (
+                      <MenuItem onClick={handleCloseNotif}>
+                        {notif.CompanyName} has {notif.Decision} your application for the {notif.Position} position.
+
+                        <IconButton onClick={() => removeNotification(notif.id)} aria-label="delete">
+                          <DeleteIcon />
+                        </IconButton>
+                      </MenuItem>
+                    ))}
+                
+              </Menu>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
@@ -389,164 +494,167 @@ function DashboardContent() {
                     {filteredData &&
                       filteredData.map((jobPosting) => (
                         <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-                        <CardContent sx={{ flexGrow: 4 }}>
-                          <JobCard
-                            sx={{
-                              height: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                            posting={jobPosting}
-                            key={jobPosting.id}
-                          />
-                          <Typography
-                            gutterBottom
-                            variant="h5"
-                            component="h2"
-                            style={{ color: "black" }}
-                          >
-                            {jobPosting.jobTitle}
-                          </Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button
-                            id={`apply-button-${jobPosting.id}`}
-                            size="small" onClick={() => handleClickOpen(jobPosting.id)}>
-                               View
-                          </Button>
-                          <div>
-                            <BootstrapDialog
-                              onClose={handleClose}
-                              aria-labelledby="customized-dialog-title"
-                              open={open1 && openJobPostingId === jobPosting.id} // only open the dialog if openJobPostingId matches the current jobPosting ID
+
+                          <CardContent sx={{ flexGrow: 4 }}>
+                            <JobCard
+                              sx={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                              posting={jobPosting}
+                              key={jobPosting.id}
+                            />
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="h2"
+                              style={{ color: "black" }}
                             >
-                              <BootstrapDialogTitle
-                                id="customized-dialog-title"
+                              {jobPosting.jobTitle}
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button
+                              id={`view-button-${jobPosting.id}`}
+                              size="small" onClick={() => handleClickOpen(jobPosting.id)}>
+                              View
+                            </Button>
+                            <div>
+                              <BootstrapDialog
                                 onClose={handleClose}
+                                aria-labelledby="customized-dialog-title"
+                                open={open1 && openJobPostingId === jobPosting.id} // only open the dialog if openJobPostingId matches the current jobPosting ID
                               >
-                                {jobPosting.companyName}
-                              </BootstrapDialogTitle>
-                              <DialogContent dividers>
-                                <Typography variant="h6" gutterBottom>
-                                  Job Description:
-                                </Typography>
-                                <Typography gutterBottom>
-                                  {jobPosting.jobDescription}
-                                </Typography>
-
-                                <Typography variant="h6" gutterBottom>
-                                  Location:
-                                </Typography>
-                                <Typography gutterBottom>
-                                  {jobPosting.Location}
-                                </Typography>
-
-                                <Typography variant="h6" gutterBottom>
-                                  Salary:
-                                </Typography>
-                                <Typography gutterBottom>{jobPosting.Salary}$/Hour</Typography>
-                              </DialogContent>
-                            </BootstrapDialog>
-                          </div>
-
-                          <Button
-                            size="small"
-                            id={`apply-button-${jobPosting.id}`}
-                            onClick={() => applyToJob(jobPosting)}
-                          >
-                            Apply
-                          </Button>
-                        </CardActions>
-                      </Grid>
-                    ))}
-                </Grid>
-              </Container>
-            </Container>
-            ) :
-              (
-
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                  <Container sx={{ py: 5 }} maxWidth="md">
-                    <Grid container spacing={4}>
-                      {postings &&
-                        postings.map((jobPosting) => (
-                          <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-                            <CardContent sx={{ flexGrow: 4 }}>
-                              <JobCard
-                                sx={{
-                                  height: "100%",
-                                  display: "flex",
-                                  flexDirection: "column",
-                                }}
-                                posting={jobPosting}
-                                key={jobPosting.id}
-                              />
-                              <Typography
-                                gutterBottom
-                                variant="h5"
-                                component="h2"
-                                style={{ color: "black" }}
-                              >
-                                {jobPosting.jobTitle}
-                              </Typography>
-                            </CardContent>
-                            <CardActions>
-                              <Button
-                                id={`apply-button-${jobPosting.id}`}
-                                size="small" onClick={() => handleClickOpen(jobPosting.id)}>
-                                   View
-                              </Button>
-                              <div>
-                                <BootstrapDialog
+                                <BootstrapDialogTitle
+                                  id="customized-dialog-title"
                                   onClose={handleClose}
-                                  aria-labelledby="customized-dialog-title"
-                                  open={open1 && openJobPostingId === jobPosting.id} // only open the dialog if openJobPostingId matches the current jobPosting ID
                                 >
-                                  <BootstrapDialogTitle
-                                    id="customized-dialog-title"
-                                    onClose={handleClose}
-                                  >
-                                    {jobPosting.companyName}
-                                  </BootstrapDialogTitle>
-                                  <DialogContent dividers>
-                                    <Typography variant="h6" gutterBottom>
-                                      Job Description:
-                                    </Typography>
-                                    <Typography gutterBottom>
-                                      {jobPosting.jobDescription}
-                                    </Typography>
+                                  {jobPosting.companyName}
+                                </BootstrapDialogTitle>
+                                <DialogContent dividers>
+                                  <Typography variant="h6" gutterBottom>
+                                    Job Description:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.jobDescription}
+                                  </Typography>
 
-                                    <Typography variant="h6" gutterBottom>
-                                      Location:
-                                    </Typography>
-                                    <Typography gutterBottom>
-                                      {jobPosting.Location}
-                                    </Typography>
+                                  <Typography variant="h6" gutterBottom>
+                                    Location:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.Location}
+                                  </Typography>
 
-                                    <Typography variant="h6" gutterBottom>
-                                      Salary:
-                                    </Typography>
-                                    <Typography gutterBottom>{jobPosting.Salary}$/Hour</Typography>
-                                  </DialogContent>
-                                </BootstrapDialog>
-                              </div>
+                                  <Typography variant="h6" gutterBottom>
+                                    Salary:
+                                  </Typography>
+                                  <Typography gutterBottom>{jobPosting.Salary}$/Hour</Typography>
+                                </DialogContent>
+                              </BootstrapDialog>
+                            </div>
 
-                              <Button
-                                size="small"
-                                id={`apply-button-${jobPosting.id}`}
-                                onClick={() => applyToJob(jobPosting)}
-                              >
-                                Apply
-                              </Button>
-                            </CardActions>
-                          </Grid>
-                        ))}
-                    </Grid>
-                  </Container>
+                            <Button
+                              size="small"
+                              id={`apply-button-${jobPosting.id}`}
+                              onClick={() => applyToJob(jobPosting)}
+                            >
+                              Apply
+                            </Button>
+                          </CardActions>
+                        </Grid>
+                      ))}
+                  </Grid>
                 </Container>
-              )
+              </Container>
+            ) : (
+              <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Container sx={{ py: 5 }} maxWidth="md">
+                  <Grid container spacing={4}>
+                    {postings &&
+                      postings.map((jobPosting) => (
+                        <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
+                          <CardContent sx={{ flexGrow: 4 }}>
+                            <JobCard
+                              sx={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                              posting={jobPosting}
+                              key={jobPosting.id}
+                            />
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="h2"
+                              style={{ color: "black" }}
+                            >
+                              {jobPosting.jobTitle}
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <Button
+                              id={`view-button-${jobPosting.id}`}
+                              size="small"
+                              onClick={() => handleClickOpen(jobPosting.id)}
+                            >
+                              View
+                            </Button>
+                            <div>
+                              <BootstrapDialog
+                                onClose={handleClose}
+                                aria-labelledby="customized-dialog-title"
+                                open={
+                                  open1 && openJobPostingId === jobPosting.id
+                                } // only open the dialog if openJobPostingId matches the current jobPosting ID
+                              >
+                                <BootstrapDialogTitle
+                                  id="customized-dialog-title"
+                                  onClose={handleClose}
+                                >
+                                  {jobPosting.companyName}
+                                </BootstrapDialogTitle>
+                                <DialogContent dividers>
+                                  <Typography variant="h6" gutterBottom>
+                                    Job Description:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.jobDescription}
+                                  </Typography>
 
-            }
+                                  <Typography variant="h6" gutterBottom>
+                                    Location:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.Location}
+                                  </Typography>
+
+                                  <Typography variant="h6" gutterBottom>
+                                    Salary:
+                                  </Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.Salary}$/Hour
+                                  </Typography>
+                                </DialogContent>
+                              </BootstrapDialog>
+                            </div>
+
+                            <Button
+                              size="small"
+                              id={`apply-button-${jobPosting.id}`}
+                              onClick={() => applyToJob(jobPosting)}
+                            >
+                              Apply
+                            </Button>
+                          </CardActions>
+                        </Grid>
+                      ))}
+                  </Grid>
+                </Container>
+              </Container>
+            )}
           </Box>
         </Box>
       </ThemeProvider>
