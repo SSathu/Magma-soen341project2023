@@ -27,6 +27,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import DeleteIcon from "@mui/icons-material/Delete";
 // import { handleFileUpload } from "./../../pages/api/upload.js";
 // import fs from "fs";
 
@@ -269,24 +270,41 @@ function DashboardContent() {
                   <Brightness4Icon />
                 )}
               </IconButton>
-              <IconButton id="basic-button"
-        aria-controls={openNotif ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={openNotif ? 'true' : undefined}
-        onClick={handleClickNotif}><Badge badgeContent={3} color="error"> <NotificationsIcon onClick> </NotificationsIcon></Badge></IconButton>
-        <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={openNotif}
-        onClose={handleCloseNotif}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <MenuItem onClick={handleCloseNotif}>Notification 1</MenuItem>
-        <MenuItem onClick={handleCloseNotif}>Notification 2</MenuItem>
-        <MenuItem onClick={handleCloseNotif}>Notification 3</MenuItem>
-      </Menu>
+              <IconButton
+                id="basic-button"
+                aria-controls="basic-menu"
+                aria-haspopup="true"
+                onClick={handleClickNotif}
+              >
+                <Badge badgeContent={3} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={openNotif}
+                onClose={handleCloseNotif}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={handleCloseNotif}>
+                  Notification 1
+                  <IconButton aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNotif}>Notification 2
+                <IconButton aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNotif}>Notification 3
+                <IconButton aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton></MenuItem>
+              </Menu>
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
