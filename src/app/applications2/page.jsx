@@ -228,7 +228,7 @@ function DashboardContent() {
     Decision: ''
   });
 
-  const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.FirstName, app.LastName, app.StudentEmail, app.Accepted ? 'Accepted' : 'Not Accepted', app.GaveDecision)) || [];
+  const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.FirstName, app.LastName, app.StudentEmail, app.Accepted ? 'Accepted' : 'refused', app.GaveDecision)) || [];
 
   async function sendInfo() {
 
@@ -298,6 +298,7 @@ function DashboardContent() {
         studentEmail: formData.StudentEmail,
         result: Decision,
         Notified: false,
+        JobPosition: formData.JobPosition
       })
     });
     const json = await response.json();
@@ -328,16 +329,7 @@ function DashboardContent() {
 
   };
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const openNotif = Boolean(anchorEl);
-    const handleClickNotif = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleCloseNotif = () => {
-      setAnchorEl(null);
-    };
-
-
+   
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
@@ -368,12 +360,13 @@ function DashboardContent() {
                 noWrap
                 sx={{ flexGrow: 1 }}
               >
-                CareerHub
+                 CareerHub
               </Typography>
 
               <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
+            
 
             </Toolbar>
           </AppBar>
@@ -386,51 +379,19 @@ function DashboardContent() {
                 px: [1],
               }}
             >
-
-//              <IconButton onClick={toggleDrawer}>
-  //              <ChevronLeftIcon />
-    //          </IconButton>
-      //      </Toolbar>
-       //     <Divider />
-        //    <List component="nav">
-        //      {mainListItems}
-        //      <Divider sx={{ my: 1 }} />
-          //    {secondaryListItems}
-         //   </List>
-         // </Drawer>
-        //  <Box
-         //   component="main"
-
-              CareerHub
-            </Typography>
-            
-            <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-        {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-      </IconButton>
-      <IconButton id="basic-button"
-        aria-controls={openNotif ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={openNotif ? 'true' : undefined}
-        onClick={handleClickNotif}><Badge badgeContent={3} color="error"> <NotificationsIcon onClick> </NotificationsIcon></Badge></IconButton>
-        <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={openNotif}
-        onClose={handleCloseNotif}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <MenuItem onClick={handleCloseNotif}>Notification 1</MenuItem>
-        <MenuItem onClick={handleCloseNotif}>Notification 2</MenuItem>
-        <MenuItem onClick={handleCloseNotif}>Notification 3</MenuItem>
-      </Menu>
-
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-
+              <IconButton onClick={toggleDrawer}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+              {mainListItems}
+              <Divider sx={{ my: 1 }} />
+              {secondaryListItems}
+            </List>
+          </Drawer>
+          <Box
+            component="main"
             sx={{
               backgroundColor: (theme) =>
                 theme.palette.mode === "light"
@@ -535,7 +496,7 @@ function DashboardContent() {
                                       </Button>
                                     </StyledTableCell>
                                     <StyledTableCell align="left">
-                                      <Button onClick={() => handleDeclined(row)} id={`decline-button-${row.id}`} variant="contained" color="error"  disabled={row.GaveDecision}>
+                                      <Button onClick={() => handleDeclined(row)} id={`decline-button-${row.id}`} variant="contained" color="error"  disabled={row.GaveDecison}>
                                         Decline
                                       </Button>
                                     </StyledTableCell>
