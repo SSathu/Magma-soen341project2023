@@ -107,7 +107,7 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 function createData(companyname, jobtitle, status, empemail, interviewstatus) {
-  return { companyname, jobtitle, status, empemail,interviewstatus };
+  return { companyname, jobtitle, status, empemail, interviewstatus };
 }
 
 function DashboardContent() {
@@ -254,8 +254,8 @@ function DashboardContent() {
 
 
   };
-  
-  // const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail, app.StudentEmail)) || [];
+
+  const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail, app.StudentEmail)) || [];
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openNotif = Boolean(anchorEl);
@@ -303,23 +303,24 @@ function DashboardContent() {
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
               <IconButton id="basic-button"
-        aria-controls={openNotif ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={openNotif ? 'true' : undefined}
-        onClick={handleClickNotif}><Badge badgeContent={3} color="error"> <NotificationsIcon onClick> </NotificationsIcon></Badge></IconButton>
-        <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={openNotif}
-        onClose={handleCloseNotif}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <MenuItem onClick={handleCloseNotif}>Notification 1</MenuItem>
-        <MenuItem onClick={handleCloseNotif}>Notification 2</MenuItem>
-        <MenuItem onClick={handleCloseNotif}>Notification 3</MenuItem>
-      </Menu>
+                aria-controls={openNotif ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={openNotif ? 'true' : undefined}
+                onClick={handleClickNotif}>
+                <Badge badgeContent={3} color="error"> <NotificationsIcon onClick> </NotificationsIcon></Badge></IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={openNotif}
+                onClose={handleCloseNotif}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem onClick={handleCloseNotif}>Notification 1</MenuItem>
+                <MenuItem onClick={handleCloseNotif}>Notification 2</MenuItem>
+                <MenuItem onClick={handleCloseNotif}>Notification 3</MenuItem>
+              </Menu>
 
             </Toolbar>
           </AppBar>
@@ -378,65 +379,65 @@ function DashboardContent() {
                         My Applications
                       </Typography>
 
-                    <Box
-                      component="form"
-                      noValidate
-                      onSubmit={handleSubmit}
-                      sx={{ mt: 1 }}
-                    >
-                      <TableContainer component={Paper}>
-                        <Table
-                          sx={{ minWidth: 850 }}
-                          aria-label="customized table"
-                        >
-                          <TableHead>
-                            <TableRow>
-                              <StyledTableCell>Company Name</StyledTableCell>
-                              <StyledTableCell align="left">
-                                Job Position
-                              </StyledTableCell>
-                              <StyledTableCell align="left">
-                                Status
-                              </StyledTableCell>
-                              <StyledTableCell align="left">
-                                Employer Email
-                              </StyledTableCell>
-                              <StyledTableCell align="left">
-                                Selection Status
-                              </StyledTableCell>
+                      <Box
+                        component="form"
+                        noValidate
+                        onSubmit={handleSubmit}
+                        sx={{ mt: 1 }}
+                      >
+                        <TableContainer component={Paper}>
+                          <Table
+                            sx={{ minWidth: 850 }}
+                            aria-label="customized table"
+                          >
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCell>Company Name</StyledTableCell>
+                                <StyledTableCell align="left">
+                                  Job Position
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  Status
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  Employer Email
+                                </StyledTableCell>
+                                <StyledTableCell align="left">
+                                  Selection Status
+                                </StyledTableCell>
 
-                              <StyledTableCell align="right"></StyledTableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            {rows
-                            .map((row) => (
-                              <StyledTableRow key={row.companyname}>
-                                <StyledTableCell component="th" scope="row">
-                                  {row.companyname}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                  {row.jobtitle}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                  {row.status}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                  {row.empemail}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">
-                                  {row.interviewstatus}
-                                </StyledTableCell>                
-                                <StyledTableCell align="right">
-                                  <Button       onClick={() => handleDelete(row)}>
-                                  <DeleteIcon />
-                                  </Button>
-                                </StyledTableCell>
-                              </StyledTableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
+                                <StyledTableCell align="right"></StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {rows
+                                .map((row) => (
+                                  <StyledTableRow key={row.companyname}>
+                                    <StyledTableCell component="th" scope="row">
+                                      {row.companyname}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      {row.jobtitle}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      {row.status}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      {row.empemail}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                      {row.interviewstatus}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="right">
+                                      <Button onClick={() => handleDelete(row)}>
+                                        <DeleteIcon />
+                                      </Button>
+                                    </StyledTableCell>
+                                  </StyledTableRow>
+                                ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
 
                         <Grid item xs={12}>
                           <Button>

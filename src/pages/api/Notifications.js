@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 export default async function handler(req, res) {
     
   console.log("called handler")  
-  const {studentEmail, Notified, CompanyName, result} = req.body
+  const {studentEmail, Notified, CompanyName, result, JobPosition} = req.body
 
   try {
     const Notifications = await prisma.Notifications.create({
@@ -14,7 +14,8 @@ export default async function handler(req, res) {
         studentEmail : studentEmail,
         CompanyName : CompanyName,
         Notified : Notified,
-        Decision: result, 
+        Decision: result,
+        Position: JobPosition,
       }
     })
 
