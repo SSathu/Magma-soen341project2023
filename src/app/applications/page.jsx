@@ -257,14 +257,6 @@ function DashboardContent() {
 
   const rows = applications?.map((app) => createData(app.CompanyName, app.JobTitle, app.Status ? 'Viewed' : 'Not Viewed', app.EmployerEmail, app.StudentEmail)) || [];
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openNotif = Boolean(anchorEl);
-  const handleClickNotif = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleCloseNotif = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -302,7 +294,7 @@ function DashboardContent() {
               <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
                 {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
-             
+
 
             </Toolbar>
           </AppBar>

@@ -166,14 +166,6 @@ function DashboardContent() {
     });
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const openNotif = Boolean(anchorEl);
-  const handleClickNotif = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleCloseNotif = () => {
-    setAnchorEl(null);
-  };
 
 
   return (
