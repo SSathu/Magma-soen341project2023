@@ -50,6 +50,7 @@ model Applications{
     CompanyName     String
     Viewed         Boolean  @default(false)
     Accepted       Boolean  @default(false)
+    GaveDecision Boolean @default(false)
 }
 
 model File {
@@ -58,4 +59,23 @@ model File {
   type      String
   data      Bytes
   createdAt DateTime @default(now())
+}
+
+model Ratings{np
+  id        Int      @id @default(autoincrement())
+  Email     String 
+  FirstName String
+  LastName  String
+  CompanyName String
+  CompanyReview String @default("")
+  Rating  Float @default(0)
+
+}
+
+model Notifications{
+  id        Int      @id @default(autoincrement())
+  CompanyName     String 
+  studentEmail String
+  Notified Boolean
+  Decision String @default("")
 }
