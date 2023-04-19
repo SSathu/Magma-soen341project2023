@@ -38,9 +38,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Badge from "@mui/material/Badge";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function Copyright(props) {
   return (
@@ -199,15 +199,13 @@ function DashboardContent() {
 
   const [filteredData, setfilteredData] = useState([]);
 
- const inputHandler = (event) => {
+  const inputHandler = (event) => {
     const searchedWord = event.target.value;
     const newFilter = postings.filter((value) => {
       return value.jobTitle.toLowerCase().includes(searchedWord.toLowerCase());
     });
     setfilteredData(newFilter);
   };
-
-  
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -225,7 +223,6 @@ function DashboardContent() {
     let result = await fetch("/api/getNotifications");
     let body = await result.json();
     setNotifications(body);
-
   }
 
   async function getFilteredJobs() {
@@ -298,17 +295,18 @@ function DashboardContent() {
     setAnchorEl(null);
   };
 
-
   let filteredNotifications = [];
 
   if (users && users.length > 0) {
     // Find the first user where LoggedIn is true
-    const loggedInUser = users.find(user => user.LoggedIn === true);
-  
+    const loggedInUser = users.find((user) => user.LoggedIn === true);
+
     if (loggedInUser) {
       if (notifications && notifications.length > 0) {
         // Filter the notification array by the Email of the loggedInUser
-         filteredNotifications = notifications.filter(notification => notification.studentEmail === loggedInUser.Email);
+        filteredNotifications = notifications.filter(
+          (notification) => notification.studentEmail === loggedInUser.Email
+        );
         console.log(filteredNotifications);
       } else {
         console.log("No notifications found");
@@ -319,22 +317,22 @@ function DashboardContent() {
   } else {
     console.log("No users found");
   }
-  
+
   async function removeNotification(notifId) {
-    const response = await fetch('/api/deleteNotification', {
-      method: 'POST',
+    const response = await fetch("/api/deleteNotification", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         notificationID: notifId,
-      })
+      }),
     });
     const json = await response.json();
     if (json.error) {
       console.log(json.error);
     } else {
-      window.location.href = '/main'
+      window.location.href = "/main";
     }
   }
 
@@ -388,7 +386,6 @@ function DashboardContent() {
                 onClick={colorMode.toggleColorMode}
                 color="inherit"
               >
-
                 {theme.palette.mode === "dark" ? (
                   <Brightness7Icon />
                 ) : (
@@ -402,7 +399,10 @@ function DashboardContent() {
                 aria-haspopup="true"
                 onClick={handleClickNotif}
               >
-                <Badge badgeContent={filteredNotifications.length} color="error">
+                <Badge
+                  badgeContent={filteredNotifications.length}
+                  color="error"
+                >
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
@@ -415,21 +415,21 @@ function DashboardContent() {
                   "aria-labelledby": "basic-button",
                 }}
               >
-
-
                 {filteredNotifications &&
                   filteredNotifications
                     .filter((notif) => notif.Notified === false)
                     .map((notif) => (
                       <MenuItem onClick={handleCloseNotif}>
-                        {notif.CompanyName} has {notif.Decision} your application for the {notif.Position} position.
-
-                        <IconButton onClick={() => removeNotification(notif.id)} aria-label="delete">
+                        {notif.CompanyName} has {notif.Decision} your
+                        application for the {notif.Position} position.
+                        <IconButton
+                          onClick={() => removeNotification(notif.id)}
+                          aria-label="delete"
+                        >
                           <DeleteIcon />
                         </IconButton>
                       </MenuItem>
                     ))}
-                
               </Menu>
             </Toolbar>
           </AppBar>
@@ -497,7 +497,6 @@ function DashboardContent() {
                     {filteredData &&
                       filteredData.map((jobPosting) => (
                         <Grid item key={jobPosting.id} xs={12} sm={6} md={4}>
-
                           <CardContent sx={{ flexGrow: 4 }}>
                             <JobCard
                               sx={{
@@ -520,14 +519,18 @@ function DashboardContent() {
                           <CardActions>
                             <Button
                               id={`view-button-${jobPosting.id}`}
-                              size="small" onClick={() => handleClickOpen(jobPosting.id)}>
+                              size="small"
+                              onClick={() => handleClickOpen(jobPosting.id)}
+                            >
                               View
                             </Button>
                             <div>
                               <BootstrapDialog
                                 onClose={handleClose}
                                 aria-labelledby="customized-dialog-title"
-                                open={open1 && openJobPostingId === jobPosting.id} // only open the dialog if openJobPostingId matches the current jobPosting ID
+                                open={
+                                  open1 && openJobPostingId === jobPosting.id
+                                } // only open the dialog if openJobPostingId matches the current jobPosting ID
                               >
                                 <BootstrapDialogTitle
                                   id="customized-dialog-title"
@@ -553,7 +556,9 @@ function DashboardContent() {
                                   <Typography variant="h6" gutterBottom>
                                     Salary:
                                   </Typography>
-                                  <Typography gutterBottom>{jobPosting.Salary}$/Hour</Typography>
+                                  <Typography gutterBottom>
+                                    {jobPosting.Salary}$/Hour
+                                  </Typography>
                                 </DialogContent>
                               </BootstrapDialog>
                             </div>

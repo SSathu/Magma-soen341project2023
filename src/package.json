@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "mocha test"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -32,6 +33,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "mocha": "^10.2.0",
     "prisma": "^4.12.0"
   }
 }
