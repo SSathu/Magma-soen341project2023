@@ -1,15 +1,12 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
 
-
-const inputHandler = (event) => {
+const inputHandler = (event, postings, setfilteredData) => {
   const searchedWord = event.target.value;
   const newFilter = postings.filter((value) => {
     return value.jobTitle.toLowerCase().includes(searchedWord.toLowerCase());
   });
   setfilteredData(newFilter);
 };
-
-
 
 describe('inputHandler', () => {
   it('should filter postings by job title', () => {
