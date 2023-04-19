@@ -39,6 +39,7 @@ import Badge from "@mui/material/Badge";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import DeleteIcon from '@mui/icons-material/Delete';
+
 const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 
 function Copyright(props) {
@@ -198,13 +199,15 @@ function DashboardContent() {
 
   const [filteredData, setfilteredData] = useState([]);
 
-  const inputHandler = (event) => {
+ const inputHandler = (event) => {
     const searchedWord = event.target.value;
     const newFilter = postings.filter((value) => {
       return value.jobTitle.toLowerCase().includes(searchedWord.toLowerCase());
     });
     setfilteredData(newFilter);
   };
+
+  
 
   const toggleDrawer = () => {
     setOpen(!open);

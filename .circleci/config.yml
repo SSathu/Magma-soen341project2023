@@ -15,7 +15,13 @@ jobs:
       - checkout       
 
         
-      - run: echo "this is in the pipeline"
+      - run:
+          name: Install dependencies
+          command: npm install
+      
+      - run:
+          name: Run tests
+          command: npm run test
             
 workflows:
     build:
